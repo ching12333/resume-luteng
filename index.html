@@ -984,7 +984,9 @@ function buildEditorHTML(){
 }
 
 // ============================================================
-//  ★ 一键保存到 GitHub（直接更新网址）
+//  ★ 一键保存到 GitHub
+//  原理：从 GitHub 拉取原始源码 → 只替换 INIT_ELEMENTS 数据 → 推送
+//  这样 JS 代码永远完整，打开后仍可编辑
 // ============================================================
 function saveToGitHub(){
   var toast = document.getElementById('save-toast');
@@ -992,17 +994,32 @@ function saveToGitHub(){
   toast.style.background = '#2980b9';
   toast.style.display = 'block';
 
-  var html = buildEditorHTML();
-  var encoded = btoa(unescape(encodeURIComponent(html)));
+  var currentElements = serializeElements();
+  var elementsJSON = JSON.stringify(currentElements, null, 2);
 
-  // 先获取当前文件的 SHA（更新文件需要）
-  fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH, {
+  var apiBase = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH;
+
+  // Step 1: 从 GitHub 拉取原始源码（base64）和 SHA
+  fetch(apiBase+'?ref='+GH_BRANCH, {
     headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
   })
   .then(function(r){ return r.json(); })
   .then(function(data){
     var sha = data.sha;
-    return fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH, {
+    // Step 2: 解码原始源码
+    var rawHTML = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+    // Step 3: 只替换 INIT_ELEMENTS 数据块，保留所有 JS 代码完整
+    var re = /var INIT_ELEMENTS\s*=\s*\[[\s\S]*?\];/;
+    var newHTML = rawHTML.replace(re, 'var INIT_ELEMENTS = ' + elementsJSON + ';');
+    if(!re.test(rawHTML)){
+      toast.textContent = '❌ 未找到 INIT_ELEMENTS 标记，保存失败';
+      toast.style.background = '#c0392b';
+      setTimeout(function(){ toast.style.display='none'; }, 4000);
+      return null;
+    }
+    var encoded = btoa(unescape(encodeURIComponent(newHTML)));
+    // Step 4: 推送回 GitHub
+    return fetch(apiBase, {
       method: 'PUT',
       headers: {
         'Authorization': 'token '+GH_TOKEN,
@@ -1017,16 +1034,17 @@ function saveToGitHub(){
       })
     });
   })
-  .then(function(r){ return r.json(); })
+  .then(function(r){ if(!r) return null; return r.json(); })
   .then(function(data){
+    if(!data) return;
     if(data.content || data.commit){
-      toast.textContent = '✅ 已保存！约 1 分钟后网址自动更新';
+      toast.textContent = '✅ 已保存！约 1 分钟后网址自动更新（仍可继续编辑）';
       toast.style.background = '#27ae60';
     } else {
       toast.textContent = '❌ 保存失败：'+(data.message||'未知错误');
       toast.style.background = '#c0392b';
     }
-    setTimeout(function(){ toast.style.display='none'; }, 4000);
+    setTimeout(function(){ toast.style.display='none'; }, 5000);
   })
   .catch(function(err){
     toast.textContent = '❌ 网络错误：'+err.message;
