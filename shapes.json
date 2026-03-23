@@ -1,0 +1,1564 @@
+{
+  "slide_w": 7559675,
+  "slide_h": 10691813,
+  "shapes": [
+    {
+      "index": 0,
+      "name": "图片 26",
+      "shape_type": 13,
+      "left": 4771064,
+      "top": 1139711,
+      "width": 1147605,
+      "height": 1147605,
+      "left_pct": 0.6311202531854875,
+      "top_pct": 0.10659660807760106,
+      "width_pct": 0.15180612923174608,
+      "height_pct": 0.10733493000672571,
+      "img_file": "assets/img_0.png"
+    },
+    {
+      "index": 1,
+      "name": "文本框 3",
+      "shape_type": 17,
+      "left": 355843,
+      "top": 328646,
+      "width": 1094649,
+      "height": 490904,
+      "left_pct": 0.04707120345782061,
+      "top_pct": 0.030738098393602656,
+      "width_pct": 0.14480106618340075,
+      "height_pct": 0.045914009158222274,
+      "paragraphs": [
+        {
+          "text": "卢腾",
+          "runs": [
+            {
+              "text": "卢腾",
+              "bold": true,
+              "italic": null,
+              "size": 328930,
+              "color": "660974",
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "卢腾"
+    },
+    {
+      "index": 2,
+      "name": "直接连接符 5",
+      "shape_type": 9,
+      "left": 302107,
+      "top": 847426,
+      "width": 3537934,
+      "height": 2512,
+      "left_pct": 0.03996296137069385,
+      "top_pct": 0.07925933609201732,
+      "width_pct": 0.4680008069129956,
+      "height_pct": 0.00023494612185978188
+    },
+    {
+      "index": 3,
+      "name": "文本框 19",
+      "shape_type": 17,
+      "left": 173353,
+      "top": 957435,
+      "width": 4355479,
+      "height": 1228541,
+      "left_pct": 0.022931276807534717,
+      "top_pct": 0.08954842363965775,
+      "width_pct": 0.5761463290419231,
+      "height_pct": 0.11490483419416332,
+      "paragraphs": [
+        {
+          "text": "",
+          "runs": [],
+          "alignment": "None"
+        },
+        {
+          "text": "中国石油大学（华东）(双一流,原211)     专业：应用物理学",
+          "runs": [
+            {
+              "text": "中国石油大学（华东）",
+              "bold": true,
+              "italic": null,
+              "size": 177800,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "(",
+              "bold": true,
+              "italic": null,
+              "size": 127000,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "双一流",
+              "bold": true,
+              "italic": null,
+              "size": 127000,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": ",",
+              "bold": true,
+              "italic": null,
+              "size": 127000,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "原",
+              "bold": true,
+              "italic": null,
+              "size": 127000,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "211)     ",
+              "bold": true,
+              "italic": null,
+              "size": 127000,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "专业：",
+              "bold": true,
+              "italic": null,
+              "size": 133350,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "应用物理学",
+              "bold": true,
+              "italic": null,
+              "size": 133350,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "学习成绩：GPA：3.37/4；  个人主页：   http://zhangyue.me/",
+          "runs": [
+            {
+              "text": "学习成绩：",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "GPA",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "：",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "3.37/4",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "；  ",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "个人主页：  ",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": " ",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "http://zhangyue.me/",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "联系方式：17853086665     邮箱：2309020215@s.upc.edu.cn",
+          "runs": [
+            {
+              "text": "联系方式：",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "17853086665     ",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "邮箱：",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "2309020215@s.upc.edu.cn",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "主修课程：数学物理方法：93；电动力学：90；数学建模：90；",
+          "runs": [
+            {
+              "text": "主修课程：",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": "660974",
+              "underline": null
+            },
+            {
+              "text": "数学物理方法：",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "93",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "；电动力学：",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "90",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "；数学建模：",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "90",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "；",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "\n中国石油大学（华东）(双一流,原211)     专业：应用物理学\n学习成绩：GPA：3.37/4；  个人主页：   http://zhangyue.me/\n联系方式：17853086665     邮箱：2309020215@s.upc.edu.cn\n主修课程：数学物理方法：93；电动力学：90；数学建模：90；"
+    },
+    {
+      "index": 4,
+      "name": "组合 31",
+      "shape_type": 6,
+      "left": 174712,
+      "top": 2231350,
+      "width": 7331805,
+      "height": 291618,
+      "left_pct": 0.023111046440488513,
+      "top_pct": 0.2086970656894205,
+      "width_pct": 0.9698571697857381,
+      "height_pct": 0.027274887804341508
+    },
+    {
+      "index": 5,
+      "name": "直接连接符 37",
+      "shape_type": 9,
+      "left": 293549,
+      "top": 2756935,
+      "width": 7012252,
+      "height": 0,
+      "left_pct": 0.03883090212211504,
+      "top_pct": 0.25785477168371723,
+      "width_pct": 0.927586437247633,
+      "height_pct": 0.0
+    },
+    {
+      "index": 6,
+      "name": "文本框 38",
+      "shape_type": 17,
+      "left": 259992,
+      "top": 2509718,
+      "width": 4448654,
+      "height": 275012,
+      "left_pct": 0.034391954680591426,
+      "top_pct": 0.23473268752455734,
+      "width_pct": 0.5884715943476406,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "纳米孔隙中页岩油赋存分子动力学模拟与核磁共振弛豫机制研究",
+          "runs": [
+            {
+              "text": "纳米孔隙中页岩油赋存",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "分子动力学模拟",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": "FF0000",
+              "underline": null
+            },
+            {
+              "text": "与",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "核磁共振弛豫机制",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": "FF0000",
+              "underline": null
+            },
+            {
+              "text": "研究",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "纳米孔隙中页岩油赋存分子动力学模拟与核磁共振弛豫机制研究"
+    },
+    {
+      "index": 7,
+      "name": "文本框 40",
+      "shape_type": 17,
+      "left": 5853101,
+      "top": 2531185,
+      "width": 1426994,
+      "height": 275012,
+      "left_pct": 0.7742529936802839,
+      "top_pct": 0.23674048545368312,
+      "width_pct": 0.18876393495752133,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "2024.10~2026.1",
+          "runs": [
+            {
+              "text": "2024.10~2026.1",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "2024.10~2026.1"
+    },
+    {
+      "index": 8,
+      "name": "直接连接符 49",
+      "shape_type": 9,
+      "left": 322835,
+      "top": 4616287,
+      "width": 7010810,
+      "height": 0,
+      "left_pct": 0.04270487818590085,
+      "top_pct": 0.43175904778731167,
+      "width_pct": 0.9273956883067063,
+      "height_pct": 0.0
+    },
+    {
+      "index": 9,
+      "name": "文本框 50",
+      "shape_type": 17,
+      "left": 289285,
+      "top": 4369071,
+      "width": 2980303,
+      "height": 275012,
+      "left_pct": 0.03826685671010989,
+      "top_pct": 0.40863705715765886,
+      "width_pct": 0.3942369215607814,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "页岩油核磁弛豫机制模拟与实验结合研究",
+          "runs": [
+            {
+              "text": "页岩油核磁弛豫机制",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "模拟与实验结合",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": "FF0000",
+              "underline": null
+            },
+            {
+              "text": "研究",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "页岩油核磁弛豫机制模拟与实验结合研究"
+    },
+    {
+      "index": 10,
+      "name": "文本框 51",
+      "shape_type": 17,
+      "left": 5876573,
+      "top": 4391915,
+      "width": 1120820,
+      "height": 275012,
+      "left_pct": 0.7773578890626912,
+      "top_pct": 0.4107736452180748,
+      "width_pct": 0.1482629874961556,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "2026.1~至今",
+          "runs": [
+            {
+              "text": "2026.1~",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "至今",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "2026.1~至今"
+    },
+    {
+      "index": 11,
+      "name": "文本框 52",
+      "shape_type": 17,
+      "left": 318859,
+      "top": 4675264,
+      "width": 7134146,
+      "height": 424475,
+      "left_pct": 0.04217892964975346,
+      "top_pct": 0.43727513752812547,
+      "width_pct": 0.9437106753927914,
+      "height_pct": 0.03970093753042632,
+      "paragraphs": [
+        {
+          "text": " 将模拟测量核磁共振弛豫数据与实际测量数据对比，深入核磁共振弛豫机制难点，改善现有核磁共振弛豫算法，从仿真与实验结合角度完善页岩油纳米孔隙的准确识别。",
+          "runs": [
+            {
+              "text": " ",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "将模拟测量核磁共振弛豫数据与实际测量数据对比，深入核磁共振弛豫机制难点，改善现有核磁共振弛豫算法，从仿真与实验结合角度完善页岩油纳米孔隙的准确识别。",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": " 将模拟测量核磁共振弛豫数据与实际测量数据对比，深入核磁共振弛豫机制难点，改善现有核磁共振弛豫算法，从仿真与实验结合角度完善页岩油纳米孔隙的准确识别。"
+    },
+    {
+      "index": 12,
+      "name": "直接连接符 61",
+      "shape_type": 9,
+      "left": 277745,
+      "top": 6162595,
+      "width": 7014654,
+      "height": 0,
+      "left_pct": 0.03674033605942054,
+      "top_pct": 0.5763844728672303,
+      "width_pct": 0.9279041757747523,
+      "height_pct": 0.0
+    },
+    {
+      "index": 13,
+      "name": "文本框 62",
+      "shape_type": 17,
+      "left": 256678,
+      "top": 5905465,
+      "width": 3339376,
+      "height": 275012,
+      "left_pct": 0.0339535760465893,
+      "top_pct": 0.5523352307040911,
+      "width_pct": 0.4417353920638123,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "关于提高无线快充与传统发电机转换效率研究",
+          "runs": [
+            {
+              "text": "关于提高无线快充与传统发电机转换效率研究",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "关于提高无线快充与传统发电机转换效率研究"
+    },
+    {
+      "index": 14,
+      "name": "文本框 63",
+      "shape_type": 17,
+      "left": 5841791,
+      "top": 5940706,
+      "width": 1521570,
+      "height": 275012,
+      "left_pct": 0.7727568976179532,
+      "top_pct": 0.5556313040641471,
+      "width_pct": 0.20127452569058854,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "2025.02~2025.11",
+          "runs": [
+            {
+              "text": "2025.02~2025.11",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "2025.02~2025.11"
+    },
+    {
+      "index": 15,
+      "name": "文本框 64",
+      "shape_type": 17,
+      "left": 321415,
+      "top": 6593425,
+      "width": 6833019,
+      "height": 948978,
+      "left_pct": 0.042517039422991065,
+      "top_pct": 0.6166797904153393,
+      "width_pct": 0.903877349224669,
+      "height_pct": 0.08875744459803028,
+      "paragraphs": [
+        {
+          "text": "独立查阅相关文献，设计电磁感应谐振耦合与机械驱动转换效率测量实验方案",
+          "runs": [
+            {
+              "text": "独立查阅相关文献，设计电磁感应",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "谐振耦合",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "与",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "机械驱动",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "转换效率测量实验方案",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "搭建相关实验仪器，主导完成理论模型构建，实验数据采集，观测整理电磁感应转换效率等相关影响因素",
+          "runs": [
+            {
+              "text": "搭建相关实验仪器，主导完成理论模型构建，实验数据采集，观测整理电磁感应转换效率等相关影响因素",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "独立利用comsol完成两套实验有限元仿真模拟，在张亚萍教授团队指导下完成约60%相关实验报告撰写",
+          "runs": [
+            {
+              "text": "独立利用",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "comsol",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "完成两套实验有限元",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "仿真模拟",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，在张亚萍教授团队指导下完成约",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "60%",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "相关实验报告撰写",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "以队长身份斩获山东省物理实验竞赛省一、全国大学生物理实验竞赛国二，相关论文成果在由队友撰写",
+          "runs": [
+            {
+              "text": "以队长身份斩获山东省物理实验竞赛",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "省一",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "、全国大学生物理实验竞赛",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "国二",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，相关论文成果在由队友撰写",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "独立查阅相关文献，设计电磁感应谐振耦合与机械驱动转换效率测量实验方案\n搭建相关实验仪器，主导完成理论模型构建，实验数据采集，观测整理电磁感应转换效率等相关影响因素\n独立利用comsol完成两套实验有限元仿真模拟，在张亚萍教授团队指导下完成约60%相关实验报告撰写\n以队长身份斩获山东省物理实验竞赛省一、全国大学生物理实验竞赛国二，相关论文成果在由队友撰写"
+    },
+    {
+      "index": 16,
+      "name": "文本框 65",
+      "shape_type": 17,
+      "left": 289285,
+      "top": 6198639,
+      "width": 7061166,
+      "height": 424475,
+      "left_pct": 0.03826685671010989,
+      "top_pct": 0.5797556504214953,
+      "width_pct": 0.9340568212257802,
+      "height_pct": 0.03970093753042632,
+      "paragraphs": [
+        {
+          "text": "    面向时代前沿电能转换效率难题，基于两套实验装置，分别研究机械驱动与电能调控两种电磁感应模式下的能量转换效率，探究频率、线圈位形与谐振方式等关键影响因素，并提出“中继线圈+多输入系统”的创新结构",
+          "runs": [
+            {
+              "text": "    面向时代前沿电能转换效率难题，基于两套实验装置，分别研究机械驱动与电能调控两种电磁感应模式下的能量转换效率，探究频率、线圈位形与谐振方式等关键影响因素，并提出“中继线圈",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "+",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "多输入系统”的创新结构",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "    面向时代前沿电能转换效率难题，基于两套实验装置，分别研究机械驱动与电能调控两种电磁感应模式下的能量转换效率，探究频率、线圈位形与谐振方式等关键影响因素，并提出“中继线圈+多输入系统”的创新结构"
+    },
+    {
+      "index": 17,
+      "name": "组合 66",
+      "shape_type": 6,
+      "left": 173353,
+      "top": 5609682,
+      "width": 7333164,
+      "height": 291618,
+      "left_pct": 0.022931276807534717,
+      "top_pct": 0.5246707925026373,
+      "width_pct": 0.970036939418692,
+      "height_pct": 0.027274887804341508
+    },
+    {
+      "index": 18,
+      "name": "组合 78",
+      "shape_type": 6,
+      "left": 174712,
+      "top": 9559875,
+      "width": 7331805,
+      "height": 291618,
+      "left_pct": 0.023111046440488513,
+      "top_pct": 0.8941303967811634,
+      "width_pct": 0.9698571697857381,
+      "height_pct": 0.027274887804341508
+    },
+    {
+      "index": 19,
+      "name": "文本框 83",
+      "shape_type": 17,
+      "left": 316273,
+      "top": 9839117,
+      "width": 6833019,
+      "height": 488595,
+      "left_pct": 0.04183685145194734,
+      "top_pct": 0.9202477634055141,
+      "width_pct": 0.903877349224669,
+      "height_pct": 0.04569804952630578,
+      "paragraphs": [
+        {
+          "text": "担任应用物理专业班长、学习委员，多次荣获优秀共青团干部，优秀学生干部，优秀学生等荣誉称号",
+          "runs": [
+            {
+              "text": "担任应用物理专业班长、学习委员，多次荣获优秀共青团干部，优秀学生干部，优秀学生等荣誉称号",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "作为第一负责人，负责校级实践队活动《原典精读·实践转换》，带领团队荣获星级实践队称号",
+          "runs": [
+            {
+              "text": "作为第一负责人，负责校级实践队活动",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "《",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "原典精读",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "·",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "实践转换",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "》",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，带领团队荣获星级实践队称号",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "担任应用物理专业班长、学习委员，多次荣获优秀共青团干部，优秀学生干部，优秀学生等荣誉称号\n作为第一负责人，负责校级实践队活动《原典精读·实践转换》，带领团队荣获星级实践队称号"
+    },
+    {
+      "index": 20,
+      "name": "组合 44",
+      "shape_type": 6,
+      "left": 173352,
+      "top": 8296751,
+      "width": 7333165,
+      "height": 291618,
+      "left_pct": 0.022931144526715765,
+      "top_pct": 0.7759910316426223,
+      "width_pct": 0.9700370716995109,
+      "height_pct": 0.027274887804341508
+    },
+    {
+      "index": 21,
+      "name": "文本框 57",
+      "shape_type": 17,
+      "left": 339542,
+      "top": 8594097,
+      "width": 6833019,
+      "height": 948978,
+      "left_pct": 0.04491489382810769,
+      "top_pct": 0.8038016564636886,
+      "width_pct": 0.903877349224669,
+      "height_pct": 0.08875744459803028,
+      "paragraphs": [
+        {
+          "text": "专业能力：具备较好的科研钻研深度，较高的绘图能力，研究素养扎实",
+          "runs": [
+            {
+              "text": "专业能力：具备较好的科研钻研深度，较高的绘图能力，研究素养扎实",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "科研能力：有完整独立的论文查阅、实验设计、数值模拟和实验实现经历",
+          "runs": [
+            {
+              "text": "科研能力：有完整独立的",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "论文查阅、实验设计、数值模拟和实验实现经历",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "仿真能力：熟练掌握多尺度计算工具（MS、Lammps，comsol）及多种编程语言（python，C）",
+          "runs": [
+            {
+              "text": "仿真能力：熟练掌握多尺度计算工具（",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "MS",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "、",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "Lammps",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "comsol",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "）及多种编程语言（",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "python",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "C",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "）",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "品质风貌：拥有极强的科研内驱力与抗压能力，擅长多种体育运动具有良好的身体素质",
+          "runs": [
+            {
+              "text": "品质风貌：拥有极强的科研内驱力与抗压能力，擅长多种体育运动具有良好的身体素质",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "专业能力：具备较好的科研钻研深度，较高的绘图能力，研究素养扎实\n科研能力：有完整独立的论文查阅、实验设计、数值模拟和实验实现经历\n仿真能力：熟练掌握多尺度计算工具（MS、Lammps，comsol）及多种编程语言（python，C）\n品质风貌：拥有极强的科研内驱力与抗压能力，擅长多种体育运动具有良好的身体素质"
+    },
+    {
+      "index": 22,
+      "name": "组合 20",
+      "shape_type": 6,
+      "left": 362223,
+      "top": 3225275,
+      "width": 7367941,
+      "height": 1132221,
+      "left_pct": 0.04791515508272512,
+      "top_pct": 0.30165838104351433,
+      "width_pct": 0.9746372694593353,
+      "height_pct": 0.10589607206934876
+    },
+    {
+      "index": 23,
+      "name": "文本框 75",
+      "shape_type": 17,
+      "left": 173352,
+      "top": 8056990,
+      "width": 7333783,
+      "height": 275012,
+      "left_pct": 0.022931144526715765,
+      "top_pct": 0.7535663034884729,
+      "width_pct": 0.9701188212456223,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "为便于您多维了解，我将详细的专业成果、科研经历与个人成长系统整理于主页   http://zhangyue.me/，诚邀您拨冗垂览。",
+          "runs": [
+            {
+              "text": "为便于您多维了解，我将详细的专业成果、科研经历与个人成长系统整理于主页   ",
+              "bold": null,
+              "italic": null,
+              "size": 123317,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "http://zhangyue.me/",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "，诚邀您拨冗垂览。",
+              "bold": null,
+              "italic": null,
+              "size": 123317,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "为便于您多维了解，我将详细的专业成果、科研经历与个人成长系统整理于主页   http://zhangyue.me/，诚邀您拨冗垂览。"
+    },
+    {
+      "index": 24,
+      "name": "图形 27",
+      "shape_type": 13,
+      "left": 4579388,
+      "top": 8115857,
+      "width": 191676,
+      "height": 191676,
+      "left_pct": 0.6057651949323218,
+      "top_pct": 0.7590721049835046,
+      "width_pct": 0.025355058253165644,
+      "height_pct": 0.017927361804775298,
+      "img_file": "assets/img_1.png"
+    },
+    {
+      "index": 25,
+      "name": "文本框 28",
+      "shape_type": 17,
+      "left": 383191,
+      "top": 2798087,
+      "width": 7134146,
+      "height": 424475,
+      "left_pct": 0.05068881929448025,
+      "top_pct": 0.26170369796029913,
+      "width_pct": 0.9437106753927914,
+      "height_pct": 0.03970093753042632,
+      "paragraphs": [
+        {
+          "text": "针对页岩中流固相互作用导致核磁信号识别困难问题，利用分子模拟技术再现高温高压地层环境下页岩油赋存状态，并将所得模拟轨迹用于核磁共振弛豫研究，获得实际测量中难以准确测量的核磁数据。",
+          "runs": [
+            {
+              "text": "针对页岩中流固相互作用导致核磁信号识别困难问题，利用分子模拟技术再现高温高压地层环境下页岩油赋存状态，并将所得模拟轨迹用于核磁共振弛豫研究，获得实际测量中难以准确测量的核磁数据。",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "针对页岩中流固相互作用导致核磁信号识别困难问题，利用分子模拟技术再现高温高压地层环境下页岩油赋存状态，并将所得模拟轨迹用于核磁共振弛豫研究，获得实际测量中难以准确测量的核磁数据。"
+    },
+    {
+      "index": 26,
+      "name": "文本框 42",
+      "shape_type": 17,
+      "left": 1335325,
+      "top": 410965,
+      "width": 3248422,
+      "height": 417807,
+      "left_pct": 0.17663788456514334,
+      "top_pct": 0.03843735388937311,
+      "width_pct": 0.4297039224569839,
+      "height_pct": 0.03907728277701827,
+      "paragraphs": [
+        {
+          "text": "祝老师教师节快乐 ",
+          "runs": [
+            {
+              "text": "祝老师教师节快乐 ",
+              "bold": null,
+              "italic": true,
+              "size": 268605,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "",
+              "bold": null,
+              "italic": null,
+              "size": 268605,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "祝老师教师节快乐 "
+    },
+    {
+      "index": 27,
+      "name": "图片 59",
+      "shape_type": 13,
+      "left": 6125563,
+      "top": 1012155,
+      "width": 882069,
+      "height": 1235110,
+      "left_pct": 0.8102944901731887,
+      "top_pct": 0.09466635826870522,
+      "width_pct": 0.1166808096908928,
+      "height_pct": 0.1155192295263675,
+      "img_file": "assets/img_2.png"
+    },
+    {
+      "index": 28,
+      "name": "组合 76",
+      "shape_type": 6,
+      "left": 230774,
+      "top": 876610,
+      "width": 7328901,
+      "height": 291618,
+      "left_pct": 0.030526973712494253,
+      "top_pct": 0.0819889012275093,
+      "width_pct": 0.9694730262875058,
+      "height_pct": 0.027274887804341508
+    },
+    {
+      "index": 29,
+      "name": "图形 92",
+      "shape_type": 13,
+      "left": 2829524,
+      "top": 1491041,
+      "width": 191676,
+      "height": 191676,
+      "left_pct": 0.3742917519602364,
+      "top_pct": 0.1394563298104821,
+      "width_pct": 0.025355058253165644,
+      "height_pct": 0.017927361804775298,
+      "img_file": "assets/img_3.png"
+    },
+    {
+      "index": 30,
+      "name": "直接连接符 93",
+      "shape_type": 9,
+      "left": 207649,
+      "top": 7788756,
+      "width": 7010810,
+      "height": 0,
+      "left_pct": 0.027467979774262782,
+      "top_pct": 0.7284785096783867,
+      "width_pct": 0.9273956883067063,
+      "height_pct": 0.0
+    },
+    {
+      "index": 31,
+      "name": "文本框 94",
+      "shape_type": 17,
+      "left": 222996,
+      "top": 7513744,
+      "width": 1098378,
+      "height": 275012,
+      "left_pct": 0.029498093502696877,
+      "top_pct": 0.7027567728691102,
+      "width_pct": 0.14529434135726735,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "其余项目经历",
+          "runs": [
+            {
+              "text": "其余项目经历",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "其余项目经历"
+    },
+    {
+      "index": 32,
+      "name": "文本框 95",
+      "shape_type": 17,
+      "left": 5824964,
+      "top": 7569937,
+      "width": 1426994,
+      "height": 275012,
+      "left_pct": 0.7705310082774722,
+      "top_pct": 0.7080124764621304,
+      "width_pct": 0.18876393495752133,
+      "height_pct": 0.025721736809276405,
+      "paragraphs": [
+        {
+          "text": "2023.11~2025.1",
+          "runs": [
+            {
+              "text": "2023.11~2025.1",
+              "bold": true,
+              "italic": null,
+              "size": 150749,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "2023.11~2025.1"
+    },
+    {
+      "index": 33,
+      "name": "文本框 97",
+      "shape_type": 17,
+      "left": 355843,
+      "top": 5095331,
+      "width": 6833019,
+      "height": 488595,
+      "left_pct": 0.04707120345782061,
+      "top_pct": 0.4765637969912119,
+      "width_pct": 0.903877349224669,
+      "height_pct": 0.04569804952630578,
+      "paragraphs": [
+        {
+          "text": "从仿真角度计算纳米孔径表面弛豫率，得到核磁数据转换孔径算法的重要改进参数",
+          "runs": [
+            {
+              "text": "从仿真角度计算纳米孔径表面弛豫率，得到核磁数据转换孔径算法的重要改进参数",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        },
+        {
+          "text": "与博士师兄共同完成SEM扫描电镜测量，测量在6nm孔隙核磁共振实验结果，编写核磁Python代码等",
+          "runs": [
+            {
+              "text": "与博士师兄共同完成",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "SEM",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "扫描电镜测量，测量在",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "6nm",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "孔隙核磁共振实验结果，编写核磁",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "Python",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "代码等",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "从仿真角度计算纳米孔径表面弛豫率，得到核磁数据转换孔径算法的重要改进参数\n与博士师兄共同完成SEM扫描电镜测量，测量在6nm孔隙核磁共振实验结果，编写核磁Python代码等"
+    },
+    {
+      "index": 34,
+      "name": "文本框 100",
+      "shape_type": 17,
+      "left": 318570,
+      "top": 7819470,
+      "width": 6833019,
+      "height": 258404,
+      "left_pct": 0.04214070049307675,
+      "top_pct": 0.7313511749597565,
+      "width_pct": 0.903877349224669,
+      "height_pct": 0.024168398755197083,
+      "paragraphs": [
+        {
+          "text": "参加大学生数学建模美赛，数维杯等数学建模竞赛，作为队长与队员共同斩获国三",
+          "runs": [
+            {
+              "text": "参加大学生数学建模美赛，数维杯等数学建模竞赛，作为队长与队员共同斩获",
+              "bold": null,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            },
+            {
+              "text": "国三",
+              "bold": true,
+              "italic": null,
+              "size": 137033,
+              "color": null,
+              "underline": null
+            }
+          ],
+          "alignment": "None"
+        }
+      ],
+      "full_text": "参加大学生数学建模美赛，数维杯等数学建模竞赛，作为队长与队员共同斩获国三"
+    }
+  ]
+}

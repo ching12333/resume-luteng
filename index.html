@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>卢腾 - 个人简历</title>
+<style>
+  /* ===== 全局 ===== */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #d0d0d0;
+    font-family: "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    font-size: 13px;
+    color: #111;
+  }
+
+  /* ===== 工具栏 ===== */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 44px;
+    background: #2c2c2c; display: flex; align-items: center;
+    justify-content: center; gap: 12px; z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+  #toolbar span { color: #ccc; font-size: 13px; font-family: Arial; }
+  #toolbar .tip { color: #aaa; font-size: 12px; }
+  #toolbar button {
+    background: #4a90d9; border: none; color: white;
+    padding: 5px 14px; border-radius: 4px; cursor: pointer;
+    font-size: 12px; font-family: Arial;
+    transition: background 0.15s;
+  }
+  #toolbar button:hover { background: #357abd; }
+  #toolbar button.save-btn { background: #27ae60; }
+  #toolbar button.save-btn:hover { background: #1e8449; }
+
+  /* ===== 页面容器 ===== */
+  #page-wrap {
+    margin: 54px auto 30px;
+    width: 794px; /* A4 96dpi */
+  }
+
+  /* ===== 简历纸张 ===== */
+  #resume {
+    width: 794px;
+    min-height: 1123px;
+    background: #fff;
+    padding: 28px 32px 28px 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+  }
+
+  /* ===== 可编辑元素通用 ===== */
+  [contenteditable="true"] {
+    outline: none;
+    cursor: text;
+    border-radius: 2px;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  [contenteditable="true"]:hover {
+    background: rgba(74,144,217,0.07);
+    box-shadow: 0 0 0 1px rgba(74,144,217,0.4);
+  }
+  [contenteditable="true"]:focus {
+    background: rgba(74,144,217,0.12);
+    box-shadow: 0 0 0 2px rgba(74,144,217,0.6);
+  }
+
+  /* ===== 图片可替换 ===== */
+  .img-wrap {
+    position: relative; display: inline-block; cursor: pointer;
+  }
+  .img-wrap:hover::after {
+    content: "点击替换图片";
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+    color: #fff; font-size: 12px; font-family: Arial;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 2px;
+    display: flex;
+  }
+  .img-wrap img { display: block; }
+  .img-wrap input[type=file] { display: none; }
+
+  /* ===== 标题区 ===== */
+  #header-area {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  #header-left { flex: 1; }
+  #name-line { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  #name {
+    font-size: 32px; font-weight: 900; color: #c0392b;
+    font-family: "SimHei","黑体","Microsoft YaHei",sans-serif;
+    letter-spacing: 2px; line-height: 1.1;
+  }
+  #subtitle {
+    font-size: 15px; color: #555; font-style: italic;
+    font-family: "KaiTi","楷体","STKaiti",serif;
+  }
+
+  /* ===== 分割线 ===== */
+  .divider {
+    height: 2px; background: #2c3e50;
+    margin: 5px 0 8px 0;
+  }
+
+  /* ===== 节标题 ===== */
+  .section-title {
+    display: flex; align-items: center; gap: 6px;
+    margin: 10px 0 6px 0;
+  }
+  .section-icon {
+    width: 14px; height: 14px; background: #2c3e50;
+    flex-shrink: 0;
+  }
+  .section-title-text {
+    font-size: 15px; font-weight: 900; color: #2c3e50;
+    font-family: "SimHei","黑体","Microsoft YaHei",sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* ===== 教育背景 ===== */
+  #edu-area { margin-bottom: 4px; }
+  .edu-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 3px; }
+  .diamond { color: #2c3e50; font-size: 13px; margin-right: 2px; }
+  .edu-school {
+    font-size: 14px; font-weight: 900;
+    font-family: "SimHei","黑体","Microsoft YaHei",sans-serif;
+  }
+  .edu-meta { font-size: 12px; color: #444; }
+  .edu-major-label { font-weight: bold; }
+  .link-text { color: #1a5276; text-decoration: underline; }
+
+  /* ===== 右侧照片区 ===== */
+  #photo-area {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; margin-left: 12px; flex-shrink: 0;
+  }
+  #photo-img { width: 88px; height: 110px; object-fit: cover; border: 1px solid #ccc; }
+  #qr-img { width: 72px; height: 72px; object-fit: contain; }
+
+  /* ===== 科研/项目条目 ===== */
+  .exp-block { margin-bottom: 8px; }
+  .exp-title-row {
+    display: flex; justify-content: space-between;
+    align-items: baseline; margin-bottom: 2px;
+  }
+  .exp-title {
+    font-size: 13.5px; font-weight: 900;
+    font-family: "SimHei","黑体","Microsoft YaHei",sans-serif;
+  }
+  .exp-title .highlight { color: #c0392b; }
+  .exp-date { font-size: 12px; color: #444; white-space: nowrap; margin-left: 8px; }
+  .exp-desc {
+    font-size: 12.5px; color: #222; line-height: 1.55;
+    margin-bottom: 3px; text-indent: 2em;
+  }
+  .bullet-list { margin-left: 0; }
+  .bullet-item {
+    display: flex; align-items: flex-start; gap: 4px;
+    font-size: 12.5px; line-height: 1.55; margin-bottom: 1px;
+  }
+  .bullet-item .diamond { flex-shrink: 0; margin-top: 1px; }
+
+  /* ===== 论文成果 ===== */
+  .paper-result {
+    font-size: 12.5px; line-height: 1.55; margin-bottom: 2px;
+  }
+  .paper-result .label { font-weight: bold; }
+  .paper-result .paper-title { font-style: italic; }
+
+  /* ===== 个人素养/工作经历 ===== */
+  .simple-list .bullet-item { margin-bottom: 1px; }
+
+  /* ===== 底部链接行 ===== */
+  #footer-link {
+    font-size: 12.5px; margin: 6px 0 4px 0; line-height: 1.6;
+  }
+
+  /* ===== 打印样式 ===== */
+  @media print {
+    body { background: white; }
+    #toolbar { display: none; }
+    #page-wrap { margin: 0; width: 100%; }
+    #resume { box-shadow: none; width: 100%; padding: 15mm 15mm; }
+    [contenteditable="true"]:hover,
+    [contenteditable="true"]:focus {
+      background: transparent; box-shadow: none;
+    }
+    .img-wrap:hover::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 工具栏 -->
+<div id="toolbar">
+  <span>✏️ 简历编辑器</span>
+  <span class="tip">点击任意文字即可编辑 · 点击图片可替换</span>
+  <button class="save-btn" onclick="saveHTML()">💾 保存 HTML</button>
+  <button onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+</div>
+
+<!-- 隐藏的文件输入 -->
+<input type="file" id="global-file-input" accept="image/*" style="display:none"/>
+
+<div id="page-wrap">
+<div id="resume">
+
+  <!-- ===== 顶部：姓名 + 照片 ===== -->
+  <div id="header-area">
+    <div id="header-left">
+      <div id="name-line">
+        <span id="name" contenteditable="true">卢腾</span>
+        <span id="subtitle" contenteditable="true">祝老师教师节快乐 😊</span>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <div id="photo-area">
+      <div class="img-wrap" onclick="replaceImage('photo-img')">
+        <img id="photo-img" src="assets/img_2.png" alt="证件照"/>
+        <input type="file" accept="image/*"/>
+      </div>
+      <div class="img-wrap" onclick="replaceImage('qr-img')">
+        <img id="qr-img" src="assets/img_0.png" alt="二维码"/>
+        <input type="file" accept="image/*"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 教育背景 ===== -->
+  <div class="section-title">
+    <div class="section-icon"></div>
+    <span class="section-title-text" contenteditable="true">教育背景</span>
+  </div>
+
+  <div id="edu-area">
+    <div class="edu-row">
+      <span class="diamond">◇</span>
+      <span class="edu-school" contenteditable="true">中国石油大学（华东）</span>
+      <span class="edu-meta" contenteditable="true">（双一流，原 211）&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span class="edu-meta"><span class="edu-major-label" contenteditable="true">专业：</span><span contenteditable="true">应用物理学</span></span>
+    </div>
+    <div class="edu-row">
+      <span class="diamond">◇</span>
+      <span class="edu-meta" contenteditable="true">学习成绩：GPA：3.37/4；&nbsp;&nbsp;</span>
+      <span class="edu-meta"><span class="edu-major-label" contenteditable="true">个人主页：</span>&nbsp;<span class="link-text" contenteditable="true">http://zhangyue.me/</span></span>
+    </div>
+    <div class="edu-row">
+      <span class="diamond">◇</span>
+      <span class="edu-meta"><span class="edu-major-label" contenteditable="true">联系方式：</span><span contenteditable="true">17853086665</span>&nbsp;&nbsp;&nbsp;</span>
+      <span class="edu-meta"><span class="edu-major-label" contenteditable="true">邮箱：</span><span class="link-text" contenteditable="true">2309020215@s.upc.edu.cn</span></span>
+    </div>
+  </div>
+
+  <!-- ===== 科研经历 ===== -->
+  <div class="section-title">
+    <div class="section-icon"></div>
+    <span class="section-title-text" contenteditable="true">科研经历</span>
+  </div>
+
+  <!-- 科研1 -->
+  <div class="exp-block">
+    <div class="exp-title-row">
+      <span class="exp-title" contenteditable="true">纳米孔隙中页岩油赋存<span class="highlight">分子动力学模拟</span>与<span class="highlight">核磁共振弛豫机制</span>研究</span>
+      <span class="exp-date" contenteditable="true">2024.10~2026.1</span>
+    </div>
+    <div class="exp-desc" contenteditable="true">针对页岩中流固相互作用导致核磁信号识别困难问题，利用分子模拟技术再现高温高压地层环境下页岩油赋存状态，并将所得模拟轨迹用于核磁共振弛豫研究，获得实际测量中难以准确测量的核磁数据。</div>
+    <div class="bullet-list">
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">基于 MS，Lammps 等软件，实现页岩油赋存状态的分子动力学模拟</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">利用 VMD，Python 等软件将核磁共振理论与分子模拟结果结合编写脚本，分析计算核磁共振弛豫结果</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">提出并完成不同温度条件下分层弛豫行为的研究等论文核心创新点，并在刘冰教授团队指导下完成论文撰写工作</span></div>
+    </div>
+    <div class="paper-result">
+      <span class="label" contenteditable="true">论文成果：</span><span contenteditable="true">Zechen Yan, Yue Zhang, Lei Zhu, et al. EMD-NEMD supercritical CO₂ by pressure driving in deep shale oil nanoslits. <span class="paper-title">Chemical Engineering Science</span>, 2025, Under Revision（中科院二区，独立一作）</span>
+    </div>
+  </div>
+
+  <!-- 科研2 -->
+  <div class="exp-block">
+    <div class="exp-title-row">
+      <span class="exp-title" contenteditable="true">页岩油核磁弛豫机制<span class="highlight">模拟与实验结合</span>研究</span>
+      <span class="exp-date" contenteditable="true">2026.1~ 至今</span>
+    </div>
+    <div class="exp-desc" contenteditable="true">将模拟测量核磁共振弛豫数据与实际测量数据对比，深入核磁共振弛豫机制难点，改善现有核磁共振弛豫算法，从仿真与实验结合角度完善页岩油纳米孔隙的准确识别。</div>
+    <div class="bullet-list">
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">从仿真角度计算纳米孔径表面弛豫率，得到核磁数据转换孔径算法的重要改进参数</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">与博士师兄共同完成 SEM 扫描电镜测量，测量在 6nm 孔隙核磁共振实验结果，编写核磁 Python 代码等</span></div>
+    </div>
+  </div>
+
+  <!-- ===== 项目经历 ===== -->
+  <div class="section-title">
+    <div class="section-icon"></div>
+    <span class="section-title-text" contenteditable="true">项目经历</span>
+  </div>
+
+  <!-- 项目1 -->
+  <div class="exp-block">
+    <div class="exp-title-row">
+      <span class="exp-title" contenteditable="true">关于提高无线快充与传统发电机转换效率研究</span>
+      <span class="exp-date" contenteditable="true">2025.02~2025.11</span>
+    </div>
+    <div class="exp-desc" contenteditable="true">面向时代前沿电能转换效率难题，基于两套实验装置，分别研究机械驱动与电能调控两种电磁感应模式下的能量转换效率，探究频率、线圈位形与谐振方式等关键影响因素，并提出"中继线圈＋多输入系统"的创新结构</div>
+    <div class="bullet-list">
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">独立查阅相关文献，设计电磁感应<strong>谐振耦合</strong>与<strong>机械驱动</strong>转换效率测量实验方案</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">搭建相关实验仪器，主导完成理论模型构建，实验数据采集，观测整理电磁感应转换效率等相关影响因素</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">独立利用 comsol 完成两套实验有限元<strong>仿真模拟</strong>，在张亚萍教授团队指导下完成约 60% 相关实验报告撰写</span></div>
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">以队长身份斩获山东省物理实验竞赛<strong>省一</strong>、全国大学生物理实验竞赛<strong>国二</strong>，相关论文成果在由队友撰写</span></div>
+    </div>
+  </div>
+
+  <!-- 项目2 -->
+  <div class="exp-block">
+    <div class="exp-title-row">
+      <span class="exp-title" contenteditable="true">其余项目经历</span>
+      <span class="exp-date" contenteditable="true">2023.11~2025.1</span>
+    </div>
+    <div class="bullet-list">
+      <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">参加大学生数学建模美赛，数维杯等数学建模竞赛，作为队长与队员共同斩获<strong>国三</strong></span></div>
+    </div>
+  </div>
+
+  <!-- ===== 底部链接 ===== -->
+  <div id="footer-link" contenteditable="true">
+    为便于您多维了解，我将详细的专业成果、科研经历与个人成长系统整理于主页 🔗<span class="link-text">http://zhangyue.me/</span>，诚邀您拨冗垂览。
+  </div>
+
+  <!-- ===== 个人素养 ===== -->
+  <div class="section-title">
+    <div class="section-icon"></div>
+    <span class="section-title-text" contenteditable="true">个人素养</span>
+  </div>
+  <div class="simple-list">
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">专业能力：具备较好的科研钻研深度，较高的绘图能力，研究素养扎实</span></div>
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">科研能力：有完整独立的<strong>论文查阅、实验设计、数值模拟和实验实现</strong>经历</span></div>
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">仿真能力：熟练掌握多尺度计算工具（MS、Lammps，comsol）及多种编程语言（python，C）</span></div>
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">品质风貌：拥有极强的科研内驱力与抗压能力，擅长多种体育运动具有良好的身体素质</span></div>
+  </div>
+
+  <!-- ===== 工作经历 ===== -->
+  <div class="section-title">
+    <div class="section-icon"></div>
+    <span class="section-title-text" contenteditable="true">工作经历</span>
+  </div>
+  <div class="simple-list">
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">担任应用物理专业班长、学习委员，多次荣获优秀共青团干部，优秀学生干部，优秀学生等荣誉称号</span></div>
+    <div class="bullet-item"><span class="diamond">◇</span><span contenteditable="true">作为第一负责人，负责校级实践队活动《原典精读·实践转换》，带领团队荣获星级实践队称号</span></div>
+  </div>
+
+</div><!-- #resume -->
+</div><!-- #page-wrap -->
+
+<script>
+// ===== 图片替换 =====
+function replaceImage(imgId) {
+  var input = document.getElementById('global-file-input');
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById(imgId).src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  };
+  input.click();
+}
+
+// ===== 保存 HTML =====
+function saveHTML() {
+  // 将图片 src 内联（如果已替换为 base64 则直接保存）
+  var html = '<!DOCTYPE html>\n<html lang="zh-CN">\n' + document.documentElement.innerHTML + '\n</html>';
+  var blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '卢腾-简历.html';
+  a.click();
+}
+
+// ===== 防止 Enter 产生多余 div =====
+document.querySelectorAll('[contenteditable="true"]').forEach(function(el) {
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.execCommand('insertLineBreak');
+    }
+  });
+});
+</script>
+</body>
+</html>
