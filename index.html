@@ -127,6 +127,25 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 .el-line{position:relative;width:100%;height:100%;}
 .el-line svg{position:absolute;inset:0;width:100%;height:100%;}
 
+/* ===== 紫色边框装饰框 ===== */
+.el-rect{
+  width:100%;height:100%;
+  border:2px solid #660974;
+  border-radius:2px;
+  box-sizing:border-box;
+  pointer-events:none;
+}
+
+/* ===== 星星装饰 ===== */
+.el-star{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  color:#660974;font-size:16px;
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+}
+
 /* ===== 打印 ===== */
 @media print{
   body{background:#fff;}
@@ -147,6 +166,8 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
   <button class="tbtn" onclick="addText()">＋文字</button>
   <button class="tbtn" onclick="addImageEl()">＋图片</button>
   <button class="tbtn" onclick="addLine()">＋横线</button>
+  <button class="tbtn" onclick="addRect()" title="新增紫色边框装饰框">＋紫框</button>
+  <button class="tbtn" onclick="addStar()" title="新增星星装饰">＋★</button>
   <div class="sep"></div>
 
   <!-- 字号区域 -->
@@ -488,6 +509,24 @@ function createEl(d){
     el.appendChild(wrap);
     el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
 
+  } else if(d.type === 'rect'){
+    el.dataset.eltype = 'rect';
+    var rectDiv = document.createElement('div');
+    rectDiv.className = 'el-rect';
+    // 支持自定义颜色
+    if(d.color) rectDiv.style.borderColor = d.color;
+    if(d.borderWidth) rectDiv.style.borderWidth = d.borderWidth+'px';
+    el.appendChild(rectDiv);
+
+  } else if(d.type === 'star'){
+    el.dataset.eltype = 'star';
+    var starDiv = document.createElement('div');
+    starDiv.className = 'el-star';
+    starDiv.textContent = d.char || '★';
+    if(d.color) starDiv.style.color = d.color;
+    if(d.fontSize) starDiv.style.fontSize = d.fontSize+'px';
+    el.appendChild(starDiv);
+
   } else if(d.type === 'line'){
     el.dataset.eltype = 'line';
     var lw = document.createElement('div');
@@ -509,12 +548,15 @@ function createEl(d){
       startResize(e, e.target.dataset.dir, el);
       return;
     }
+    // 如果当前元素正在编辑文字，内部鼠标事件不拦截
     if(editingText && el === selected) return;
     e.stopPropagation();
     if(e.ctrlKey || e.metaKey){
       e.preventDefault();
       toggleMultiSel(el);
     } else {
+      // 先退出其他元素的文字编辑模式
+      if(selected && selected !== el) stopTextEdit(selected);
       if(multiSel.length > 1 && multiSel.indexOf(el) !== -1){
         startMoveGroup(e);
       } else {
@@ -522,6 +564,9 @@ function createEl(d){
       }
     }
   });
+
+  // 只有文字元素才绑定双击进入编辑
+  // 图片的双击已在上面单独绑定，这里不重复
 
   slide.appendChild(el);
   return el;
@@ -918,6 +963,14 @@ function addLine(){
   var el=createEl({type:'line',x:28,y:300,w:730,h:4,color:'#2c3e50'});
   deselectAll(); selectEl(el);
 }
+function addRect(){
+  var el=createEl({type:'rect',x:50,y:200,w:200,h:80,color:'#660974',borderWidth:2});
+  deselectAll(); selectEl(el);
+}
+function addStar(){
+  var el=createEl({type:'star',x:50,y:200,w:20,h:20,char:'★',color:'#660974',fontSize:16});
+  deselectAll(); selectEl(el);
+}
 function replaceSelectedImg(){
   if(!selected||selected.dataset.eltype!=='image') return;
   replaceImgEl(selected);
@@ -958,6 +1011,15 @@ function serializeElements(){
     } else if(type==='line'){
       var ln = el.querySelector('line');
       item.color = ln ? ln.getAttribute('stroke') : '#2c3e50';
+    } else if(type==='rect'){
+      var rd = el.querySelector('.el-rect');
+      item.color = rd ? rd.style.borderColor || '#660974' : '#660974';
+      item.borderWidth = rd ? (parseFloat(rd.style.borderWidth)||2) : 2;
+    } else if(type==='star'){
+      var sd = el.querySelector('.el-star');
+      item.char = sd ? sd.textContent : '★';
+      item.color = sd ? sd.style.color || '#660974' : '#660974';
+      item.fontSize = sd ? (parseFloat(sd.style.fontSize)||16) : 16;
     }
     result.push(item);
   });
