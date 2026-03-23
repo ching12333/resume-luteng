@@ -105,11 +105,11 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 /* ===== 文字 ===== */
 .el-text{
   width:100%;height:100%;
-  overflow:hidden;line-height:1.55;
+  overflow:visible;line-height:1.55;
   word-break:break-word;white-space:pre-wrap;
 }
 .el-text[contenteditable="true"]{
-  outline:none;cursor:text;overflow:auto;user-select:text;
+  outline:none;cursor:text;overflow:visible;user-select:text;
 }
 
 /* ===== 图片 ===== */
@@ -453,7 +453,9 @@ function createEl(d){
   var el = document.createElement('div');
   el.className = 'el';
   el.id = d.id || ('el_'+Date.now()+Math.random().toString(36).slice(2));
-  el.style.cssText = 'left:'+d.x+'px;top:'+d.y+'px;width:'+d.w+'px;height:'+d.h+'px;z-index:'+(zCounter++)+';';
+  var zVal = d.z ? d.z : (++zCounter);
+  if(d.z && d.z > zCounter) zCounter = d.z;
+  el.style.cssText = 'left:'+d.x+'px;top:'+d.y+'px;width:'+d.w+'px;height:'+d.h+'px;z-index:'+zVal+';';
 
   var border = document.createElement('div');
   border.className = 'el-border';
@@ -932,22 +934,53 @@ function replaceImgEl(el){
 }
 
 // ============================================================
-//  生成干净 HTML（用于保存 / 推送）
+//  序列化当前元素状态为 JSON（保存用）
 // ============================================================
-function buildCleanHTML(){
-  var clone = document.getElementById('slide').cloneNode(true);
-  clone.querySelectorAll('.handle,.el-border,.img-hint').forEach(function(n){n.remove();});
-  clone.querySelectorAll('.el').forEach(function(el){
-    el.classList.remove('selected','multi-sel');
-    var inner = el.querySelector('.el-text');
-    if(inner) inner.removeAttribute('contenteditable');
+function serializeElements(){
+  var result = [];
+  slide.querySelectorAll('.el').forEach(function(el){
+    var type = el.dataset.eltype;
+    var item = {
+      id: el.id,
+      type: type,
+      x: parseInt(el.style.left)||0,
+      y: parseInt(el.style.top)||0,
+      w: parseInt(el.style.width)||100,
+      h: parseInt(el.style.height)||20,
+      z: parseInt(el.style.zIndex)||10
+    };
+    if(type==='text'){
+      var inner = el.querySelector('.el-text');
+      item.html = inner ? inner.innerHTML : '';
+    } else if(type==='image'){
+      var img = el.querySelector('.el-img');
+      item.src = img ? img.src : '';
+    } else if(type==='line'){
+      var ln = el.querySelector('line');
+      item.color = ln ? ln.getAttribute('stroke') : '#2c3e50';
+    }
+    result.push(item);
   });
-  return '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8"/>\n<title>卢腾 - 个人简历</title>\n'
-    +'<style>body{margin:0;background:#fff;}#slide{width:794px;min-height:1123px;position:relative;margin:0 auto;}'
-    +'.el{position:absolute;}.el-text{width:100%;height:100%;overflow:hidden;line-height:1.55;word-break:break-word;white-space:pre-wrap;}'
-    +'.el-img-wrap{width:100%;height:100%;overflow:hidden;}.el-img{width:100%;height:100%;object-fit:contain;display:block;}'
-    +'.el-line{position:relative;width:100%;height:100%;}.el-line svg{position:absolute;inset:0;width:100%;height:100%;}'
-    +'</style>\n</head>\n<body>\n'+clone.outerHTML+'\n</body>\n</html>';
+  return result;
+}
+
+// ============================================================
+//  生成完整编辑器 HTML（保存到 GitHub 用）
+//  原理：把当前所有元素的实时状态序列化为 JSON，
+//  替换页面中的 INIT_ELEMENTS，这样下次打开仍是完整编辑器
+// ============================================================
+function buildEditorHTML(){
+  var currentElements = serializeElements();
+  var elementsJSON = JSON.stringify(currentElements, null, 2);
+  // 读取当前页面源码
+  var src = document.documentElement.outerHTML;
+  // 替换 INIT_ELEMENTS 数据块（从 var INIT_ELEMENTS = [ 到 ];）
+  var re = /var INIT_ELEMENTS\s*=\s*\[([\s\S]*?)\];/;
+  src = src.replace(re, 'var INIT_ELEMENTS = ' + elementsJSON + ';');
+  // 移除所有元素的 selected/multi-sel 类
+  src = src.replace(/class="el selected"/g, 'class="el"');
+  src = src.replace(/class="el multi-sel"/g, 'class="el"');
+  return src;
 }
 
 // ============================================================
@@ -959,7 +992,7 @@ function saveToGitHub(){
   toast.style.background = '#2980b9';
   toast.style.display = 'block';
 
-  var html = buildCleanHTML();
+  var html = buildEditorHTML();
   var encoded = btoa(unescape(encodeURIComponent(html)));
 
   // 先获取当前文件的 SHA（更新文件需要）
@@ -1006,7 +1039,7 @@ function saveToGitHub(){
 //  下载 HTML
 // ============================================================
 function saveHTML(){
-  var out = buildCleanHTML();
+  var out = buildEditorHTML();
   var blob = new Blob([out],{type:'text/html;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download='卢腾-简历.html'; a.click();
