@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>卢腾 - 简历编辑器</title>
 <style>
-/* ===== 全局 ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sans-serif;user-select:none;}
 
@@ -13,19 +12,16 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 #toolbar{
   position:fixed;top:0;left:0;right:0;height:48px;
   background:#1e2a38;display:flex;align-items:center;
-  gap:4px;padding:0 12px;z-index:9999;
-  box-shadow:0 2px 8px rgba(0,0,0,0.5);
-  overflow-x:auto;
+  gap:4px;padding:0 10px;z-index:9999;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);overflow-x:auto;
 }
 #toolbar::-webkit-scrollbar{height:3px;}
 #toolbar::-webkit-scrollbar-thumb{background:#444;}
-.sep{width:1px;height:28px;background:#3d5166;margin:0 4px;flex-shrink:0;}
+.sep{width:1px;height:28px;background:#3d5166;margin:0 3px;flex-shrink:0;}
 .tlabel{color:#8aaccc;font-size:11px;font-family:Arial;white-space:nowrap;flex-shrink:0;}
-
-/* 工具按钮 */
 .tbtn{
   background:#2d3e50;border:1px solid #3d5166;color:#ccc;
-  padding:4px 9px;border-radius:4px;cursor:pointer;
+  padding:4px 8px;border-radius:4px;cursor:pointer;
   font-size:12px;font-family:Arial;white-space:nowrap;flex-shrink:0;
   transition:background .12s;line-height:1.4;
 }
@@ -35,39 +31,45 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 .tbtn.green:hover{background:#1e8449;}
 .tbtn.red{background:#c0392b;border-color:#c0392b;color:#fff;}
 .tbtn.red:hover{background:#a93226;}
-
-/* 字号输入 */
 #tb-fontsize{
   width:42px;padding:3px 4px;border:1px solid #3d5166;
   background:#2d3e50;color:#ddd;border-radius:4px;
   font-size:12px;text-align:center;flex-shrink:0;
 }
-/* 颜色 */
 #tb-color{width:30px;height:26px;border:none;padding:0;cursor:pointer;border-radius:3px;background:none;flex-shrink:0;}
+#tb-font{background:#2d3e50;color:#ccc;border:1px solid #3d5166;border-radius:4px;padding:3px 4px;font-size:12px;flex-shrink:0;}
+
+/* 多选提示角标 */
+#multi-badge{
+  position:fixed;top:54px;left:50%;transform:translateX(-50%);
+  background:#2980b9;color:#fff;font-size:11px;font-family:Arial;
+  padding:3px 12px;border-radius:12px;z-index:9998;
+  display:none;pointer-events:none;
+}
 
 /* ===== 画布 ===== */
 #canvas-wrap{margin:58px auto 40px;width:794px;}
-
-/* ===== A4 纸 ===== */
 #slide{
   width:794px;min-height:1123px;background:#fff;
-  position:relative;box-shadow:0 4px 24px rgba(0,0,0,0.35);
+  position:relative;box-shadow:0 4px 24px rgba(0,0,0,.35);
   overflow:visible;
 }
 
-/* ===== 元素通用 ===== */
+/* ===== 元素 ===== */
 .el{position:absolute;cursor:move;min-width:20px;min-height:12px;}
 .el:hover .el-border{opacity:1;}
 .el.selected .el-border{opacity:1;border-color:#2980b9;}
+.el.multi-sel .el-border{opacity:1;border-color:#e67e22;}
 
 .el-border{
   position:absolute;inset:-2px;
-  border:2px dashed rgba(100,160,220,0.65);
+  border:2px dashed rgba(100,160,220,.65);
   border-radius:2px;pointer-events:none;opacity:0;
   transition:opacity .1s;z-index:10;
 }
+.el.multi-sel .el-border{border-color:rgba(230,126,34,.8);}
 
-/* 8控制点 */
+/* 控制点 —— 只在主选中时显示 */
 .handle{
   position:absolute;width:9px;height:9px;
   background:#fff;border:2px solid #2980b9;
@@ -83,10 +85,11 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 .handle.sw{bottom:-6px;left:-6px;cursor:sw-resize;}
 .handle.w {top:calc(50% - 4px);left:-6px;cursor:w-resize;}
 
-/* ===== 文字内容 ===== */
+/* ===== 文字 ===== */
 .el-text{
-  width:100%;height:100%;overflow:hidden;
-  line-height:1.55;word-break:break-word;white-space:pre-wrap;
+  width:100%;height:100%;
+  overflow:hidden;line-height:1.55;
+  word-break:break-word;white-space:pre-wrap;
 }
 .el-text[contenteditable="true"]{
   outline:none;cursor:text;overflow:auto;user-select:text;
@@ -95,62 +98,55 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 /* ===== 图片 ===== */
 .el-img-wrap{width:100%;height:100%;position:relative;overflow:hidden;}
 .el-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
-.img-replace-hint{
+.img-hint{
   position:absolute;inset:0;background:rgba(0,0,0,0);
   display:flex;align-items:center;justify-content:center;
   color:transparent;font-size:11px;font-family:Arial;
-  transition:background .15s,color .15s;pointer-events:none;
-  border-radius:2px;
+  transition:background .15s,color .15s;pointer-events:none;border-radius:2px;
 }
-.el:hover .img-replace-hint{background:rgba(0,0,0,0.4);color:#fff;}
+.el:hover .img-hint{background:rgba(0,0,0,.4);color:#fff;}
 
 /* ===== 线条 ===== */
+.el-line{position:relative;width:100%;height:100%;}
 .el-line svg{position:absolute;inset:0;width:100%;height:100%;}
 
 /* ===== 打印 ===== */
 @media print{
   body{background:#fff;}
-  #toolbar{display:none!important;}
+  #toolbar,#multi-badge{display:none!important;}
   #canvas-wrap{margin:0;width:100%;}
   #slide{box-shadow:none;}
-  .el-border,.handle,.img-replace-hint{display:none!important;}
+  .el-border,.handle,.img-hint{display:none!important;}
 }
 </style>
 </head>
 <body>
 
-<!-- ===== 工具栏 ===== -->
+<!-- 工具栏 -->
 <div id="toolbar">
   <span style="color:#7fb3d3;font-size:13px;font-weight:bold;flex-shrink:0;">✏️ 简历</span>
   <div class="sep"></div>
 
-  <!-- 添加 -->
   <button class="tbtn" onclick="addText()">＋文字</button>
   <button class="tbtn" onclick="addImageEl()">＋图片</button>
   <button class="tbtn" onclick="addLine()">＋横线</button>
-
   <div class="sep"></div>
 
-  <!-- ★ 文字格式（作用于选中文字片段 或 整个文字块） -->
   <span class="tlabel">字号</span>
   <input id="tb-fontsize" type="number" value="13" min="6" max="120"
-    title="选中文字后修改字号"
-    onchange="execFmt('fontSize', null, this.value)"
-    oninput="execFmt('fontSize', null, this.value)"/>
+    title="选中文字后修改字号（可先用鼠标选中部分文字再改）"
+    onchange="execFmt('fontSize',null,this.value)"
+    oninput="execFmt('fontSize',null,this.value)"/>
 
   <span class="tlabel">颜色</span>
-  <input id="tb-color" type="color" value="#111111"
-    title="文字颜色"
-    onchange="execFmt('foreColor', this.value)"/>
+  <input id="tb-color" type="color" value="#111111" onchange="execFmt('foreColor',this.value)"/>
 
-  <button class="tbtn" id="btn-bold"   onclick="execFmt('bold')"   title="加粗 (Ctrl+B)"><b>B</b></button>
-  <button class="tbtn" id="btn-italic" onclick="execFmt('italic')" title="斜体 (Ctrl+I)"><i>I</i></button>
+  <button class="tbtn" id="btn-bold"   onclick="execFmt('bold')"      title="加粗"><b>B</b></button>
+  <button class="tbtn" id="btn-italic" onclick="execFmt('italic')"    title="斜体"><i>I</i></button>
   <button class="tbtn" id="btn-under"  onclick="execFmt('underline')" title="下划线"><u>U</u></button>
 
-  <!-- 字体族 -->
   <span class="tlabel">字体</span>
-  <select id="tb-font" onchange="execFmt('fontName', this.value)"
-    style="background:#2d3e50;color:#ccc;border:1px solid #3d5166;border-radius:4px;padding:3px 4px;font-size:12px;flex-shrink:0;">
+  <select id="tb-font" onchange="execFmt('fontName',this.value)">
     <option value="SimSun,宋体">宋体</option>
     <option value="SimHei,黑体,Microsoft YaHei">黑体</option>
     <option value="KaiTi,楷体">楷体</option>
@@ -158,21 +154,16 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
     <option value="Arial">Arial</option>
     <option value="Times New Roman">Times New Roman</option>
   </select>
-
   <div class="sep"></div>
 
-  <!-- 层级 / 对齐 -->
   <button class="tbtn" onclick="bringForward()" title="上移一层">↑层</button>
   <button class="tbtn" onclick="sendBackward()" title="下移一层">↓层</button>
   <button class="tbtn" onclick="alignLeft()"   title="左对齐">⬛←</button>
   <button class="tbtn" onclick="alignCenter()" title="居中">⬛↔</button>
   <button class="tbtn" onclick="alignRight()"  title="右对齐">→⬛</button>
-
   <div class="sep"></div>
 
-  <!-- 图片替换（仅图片选中时有效） -->
   <button class="tbtn" id="btn-replace-img" onclick="replaceSelectedImg()" title="替换选中图片">🖼 换图</button>
-
   <div class="sep"></div>
 
   <button class="tbtn red"   onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
@@ -180,10 +171,9 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
   <button class="tbtn"       onclick="window.print()">🖨️ 打印/PDF</button>
 </div>
 
-<!-- 隐藏文件输入 -->
+<div id="multi-badge"></div>
 <input type="file" id="img-file-input" accept="image/*" style="display:none"/>
 
-<!-- ===== 画布 ===== -->
 <div id="canvas-wrap">
   <div id="slide"></div>
 </div>
@@ -195,39 +185,28 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 var INIT_ELEMENTS = [
   {id:'e_name', type:'text', x:28, y:22, w:320, h:46,
    html:'<span style="font-size:34px;font-weight:900;color:#c0392b;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:2px;">卢腾</span>'},
-
   {id:'e_sub', type:'text', x:130, y:30, w:330, h:36,
    html:'<span style="font-size:15px;color:#555;font-style:italic;font-family:KaiTi,楷体,STKaiti,serif;">祝老师教师节快乐 😊</span>'},
-
   {id:'e_line0', type:'line', x:28, y:72, w:630, h:4, color:'#2c3e50'},
-
   {id:'e_photo', type:'image', x:672, y:18, w:94, h:118, src:'assets/img_2.png'},
   {id:'e_qr',    type:'image', x:686, y:142, w:76, h:76,  src:'assets/img_0.png'},
-
   {id:'e_edu_t', type:'text', x:28, y:82, w:300, h:24,
    html:'<span style="font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;">■ 教育背景</span>'},
-
   {id:'e_school', type:'text', x:28, y:108, w:640, h:20,
    html:'◇ <strong>中国石油大学（华东）</strong>（双一流，原 211）&nbsp;&nbsp;&nbsp;&nbsp;<strong>专业：</strong>应用物理学'},
-
   {id:'e_gpa', type:'text', x:28, y:130, w:640, h:20,
    html:'◇ 学习成绩：GPA：3.37/4；&nbsp;&nbsp;<strong>个人主页：</strong>&nbsp;<span style="color:#1a5276;text-decoration:underline;">http://zhangyue.me/</span>'},
-
   {id:'e_contact', type:'text', x:28, y:152, w:640, h:20,
    html:'◇ <strong>联系方式：</strong>17853086665&nbsp;&nbsp;&nbsp;<strong>邮箱：</strong><span style="color:#1a5276;text-decoration:underline;">2309020215@s.upc.edu.cn</span>'},
-
   {id:'e_sci_t', type:'text', x:28, y:178, w:300, h:24,
    html:'<span style="font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;">■ 科研经历</span>'},
   {id:'e_line1', type:'line', x:28, y:174, w:730, h:2, color:'#2c3e50'},
-
   {id:'e_r1t', type:'text', x:28, y:204, w:560, h:20,
    html:'<strong>纳米孔隙中页岩油赋存<span style="color:#c0392b;">分子动力学模拟</span>与<span style="color:#c0392b;">核磁共振弛豫机制</span>研究</strong>'},
   {id:'e_r1d', type:'text', x:600, y:204, w:162, h:20,
    html:'<span style="font-size:12px;color:#444;">2024.10~2026.1</span>'},
-
   {id:'e_r1desc', type:'text', x:28, y:226, w:730, h:52,
    html:'<span style="font-size:12.5px;">&nbsp;&nbsp;&nbsp;&nbsp;针对页岩中流固相互作用导致核磁信号识别困难问题，利用分子模拟技术再现高温高压地层环境下页岩油赋存状态，并将所得模拟轨迹用于核磁共振弛豫研究，获得实际测量中难以准确测量的核磁数据。</span>'},
-
   {id:'e_r1b1', type:'text', x:28, y:280, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 基于 MS，Lammps 等软件，实现页岩油赋存状态的分子动力学模拟</span>'},
   {id:'e_r1b2', type:'text', x:28, y:300, w:730, h:18,
@@ -236,23 +215,19 @@ var INIT_ELEMENTS = [
    html:'<span style="font-size:12.5px;">◇ 提出并完成不同温度条件下分层弛豫行为的研究等论文核心创新点，并在刘冰教授团队指导下完成论文撰写工作</span>'},
   {id:'e_r1paper', type:'text', x:28, y:340, w:730, h:34,
    html:'<span style="font-size:12.5px;"><strong>论文成果：</strong>Zechen Yan, Yue Zhang, Lei Zhu, et al. EMD-NEMD supercritical CO₂ by pressure driving in deep shale oil nanoslits. <em>Chemical Engineering Science</em>, 2025, Under Revision（中科院二区，独立一作）</span>'},
-
   {id:'e_r2t', type:'text', x:28, y:378, w:560, h:20,
    html:'<strong>页岩油核磁弛豫机制<span style="color:#c0392b;">模拟与实验结合</span>研究</strong>'},
   {id:'e_r2d', type:'text', x:600, y:378, w:162, h:20,
    html:'<span style="font-size:12px;color:#444;">2026.1~ 至今</span>'},
-
   {id:'e_r2desc', type:'text', x:28, y:400, w:730, h:40,
    html:'<span style="font-size:12.5px;">&nbsp;&nbsp;&nbsp;&nbsp;将模拟测量核磁共振弛豫数据与实际测量数据对比，深入核磁共振弛豫机制难点，改善现有核磁共振弛豫算法，从仿真与实验结合角度完善页岩油纳米孔隙的准确识别。</span>'},
   {id:'e_r2b1', type:'text', x:28, y:442, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 从仿真角度计算纳米孔径表面弛豫率，得到核磁数据转换孔径算法的重要改进参数</span>'},
   {id:'e_r2b2', type:'text', x:28, y:462, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 与博士师兄共同完成 SEM 扫描电镜测量，测量在 6nm 孔隙核磁共振实验结果，编写核磁 Python 代码等</span>'},
-
   {id:'e_proj_t', type:'text', x:28, y:488, w:300, h:24,
    html:'<span style="font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;">■ 项目经历</span>'},
   {id:'e_line2', type:'line', x:28, y:484, w:730, h:2, color:'#2c3e50'},
-
   {id:'e_p1t', type:'text', x:28, y:514, w:560, h:20,
    html:'<strong>关于提高无线快充与传统发电机转换效率研究</strong>'},
   {id:'e_p1d', type:'text', x:600, y:514, w:162, h:20,
@@ -267,21 +242,17 @@ var INIT_ELEMENTS = [
    html:'<span style="font-size:12.5px;">◇ 独立利用 comsol 完成两套实验有限元<strong>仿真模拟</strong>，在张亚萍教授团队指导下完成约 60% 相关实验报告撰写</span>'},
   {id:'e_p1b4', type:'text', x:28, y:638, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 以队长身份斩获山东省物理实验竞赛<strong>省一</strong>、全国大学生物理实验竞赛<strong>国二</strong>，相关论文成果在由队友撰写</span>'},
-
   {id:'e_p2t', type:'text', x:28, y:660, w:560, h:20,
    html:'<strong>其余项目经历</strong>'},
   {id:'e_p2d', type:'text', x:600, y:660, w:162, h:20,
    html:'<span style="font-size:12px;color:#444;">2023.11~2025.1</span>'},
   {id:'e_p2b1', type:'text', x:28, y:682, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 参加大学生数学建模美赛，数维杯等数学建模竞赛，作为队长与队员共同斩获<strong>国三</strong></span>'},
-
   {id:'e_link', type:'text', x:28, y:704, w:730, h:22,
    html:'<span style="font-size:12.5px;">为便于您多维了解，我将详细的专业成果、科研经历与个人成长系统整理于主页 🔗<span style="color:#1a5276;text-decoration:underline;">http://zhangyue.me/</span>，诚邀您拨冗垂览。</span>'},
-
   {id:'e_qual_t', type:'text', x:28, y:732, w:300, h:24,
    html:'<span style="font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;">■ 个人素养</span>'},
   {id:'e_line3', type:'line', x:28, y:728, w:730, h:2, color:'#2c3e50'},
-
   {id:'e_q1', type:'text', x:28, y:758, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 专业能力：具备较好的科研钻研深度，较高的绘图能力，研究素养扎实</span>'},
   {id:'e_q2', type:'text', x:28, y:778, w:730, h:18,
@@ -290,11 +261,9 @@ var INIT_ELEMENTS = [
    html:'<span style="font-size:12.5px;">◇ 仿真能力：熟练掌握多尺度计算工具（MS、Lammps，comsol）及多种编程语言（python，C）</span>'},
   {id:'e_q4', type:'text', x:28, y:818, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 品质风貌：拥有极强的科研内驱力与抗压能力，擅长多种体育运动具有良好的身体素质</span>'},
-
   {id:'e_work_t', type:'text', x:28, y:844, w:300, h:24,
    html:'<span style="font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;">■ 工作经历</span>'},
   {id:'e_line4', type:'line', x:28, y:840, w:730, h:2, color:'#2c3e50'},
-
   {id:'e_w1', type:'text', x:28, y:870, w:730, h:18,
    html:'<span style="font-size:12.5px;">◇ 担任应用物理专业班长、学习委员，多次荣获优秀共青团干部，优秀学生干部，优秀学生等荣誉称号</span>'},
   {id:'e_w2', type:'text', x:28, y:890, w:730, h:18,
@@ -304,11 +273,12 @@ var INIT_ELEMENTS = [
 // ============================================================
 //  状态
 // ============================================================
-var selected = null;
+var selected   = null;   // 主选中元素
+var multiSel   = [];     // 多选元素列表（含主选中）
 var editingText = false;
-var dragState = null;
-var zCounter = 10;
-var slide = document.getElementById('slide');
+var dragState  = null;
+var zCounter   = 10;
+var slide      = document.getElementById('slide');
 
 // ============================================================
 //  初始化
@@ -316,7 +286,7 @@ var slide = document.getElementById('slide');
 function init(){
   INIT_ELEMENTS.forEach(createEl);
   slide.addEventListener('mousedown', function(e){
-    if(e.target === slide) deselect();
+    if(e.target === slide) deselectAll();
   });
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup',   onMouseUp);
@@ -329,45 +299,39 @@ function init(){
 function createEl(d){
   var el = document.createElement('div');
   el.className = 'el';
-  el.id = d.id || ('el_' + Date.now() + Math.random());
+  el.id = d.id || ('el_'+Date.now()+Math.random().toString(36).slice(2));
   el.style.cssText = 'left:'+d.x+'px;top:'+d.y+'px;width:'+d.w+'px;height:'+d.h+'px;z-index:'+(zCounter++)+';';
 
-  // 边框 + 控制点
   var border = document.createElement('div');
   border.className = 'el-border';
   el.appendChild(border);
+
   ['nw','n','ne','e','se','s','sw','w'].forEach(function(dir){
     var h = document.createElement('div');
-    h.className = 'handle ' + dir;
+    h.className = 'handle '+dir;
     h.dataset.dir = dir;
     el.appendChild(h);
   });
 
-  // 内容
   if(d.type === 'text'){
     el.dataset.eltype = 'text';
     var inner = document.createElement('div');
     inner.className = 'el-text';
-    inner.style.fontSize = (d.fontSize || 13) + 'px';
-    inner.style.color = d.color || '#111';
-    inner.innerHTML = d.html || '';
+    inner.style.fontSize = (d.fontSize||13)+'px';
+    inner.style.color = d.color||'#111';
+    inner.innerHTML = d.html||'';
     el.appendChild(inner);
     el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
 
   } else if(d.type === 'image'){
     el.dataset.eltype = 'image';
-    el.dataset.src = d.src || '';
     var wrap = document.createElement('div');
     wrap.className = 'el-img-wrap';
     var img = document.createElement('img');
-    img.className = 'el-img';
-    img.src = d.src || '';
-    img.alt = '';
+    img.className = 'el-img'; img.src = d.src||''; img.alt='';
     var hint = document.createElement('div');
-    hint.className = 'img-replace-hint';
-    hint.textContent = '双击替换图片';
-    wrap.appendChild(img);
-    wrap.appendChild(hint);
+    hint.className = 'img-hint'; hint.textContent = '双击替换图片';
+    wrap.appendChild(img); wrap.appendChild(hint);
     el.appendChild(wrap);
     el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
 
@@ -375,33 +339,44 @@ function createEl(d){
     el.dataset.eltype = 'line';
     var lw = document.createElement('div');
     lw.className = 'el-line';
-    lw.style.position = 'relative';
     var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('preserveAspectRatio','none');
     var ln = document.createElementNS('http://www.w3.org/2000/svg','line');
     ln.setAttribute('x1','0'); ln.setAttribute('y1','50%');
     ln.setAttribute('x2','100%'); ln.setAttribute('y2','50%');
-    ln.setAttribute('stroke', d.color || '#2c3e50');
+    ln.setAttribute('stroke', d.color||'#2c3e50');
     ln.setAttribute('stroke-width','2');
-    svg.appendChild(ln);
-    lw.appendChild(svg);
-    el.appendChild(lw);
+    svg.appendChild(ln); lw.appendChild(svg); el.appendChild(lw);
   }
 
-  // ★ 关键：mousedown 统一处理移动 / 缩放（图片也能拖）
   el.addEventListener('mousedown', function(e){
     // 控制点 → 缩放
     if(e.target.classList.contains('handle')){
       e.stopPropagation(); e.preventDefault();
+      deselectAll();
       selectEl(el);
       startResize(e, e.target.dataset.dir, el);
       return;
     }
-    // 文字编辑中点击自身 → 不拦截（让光标正常）
+    // 文字编辑中点自身 → 不拦截
     if(editingText && el === selected) return;
     e.stopPropagation();
-    selectEl(el);
-    startMove(e, el);
+
+    if(e.ctrlKey || e.metaKey){
+      // ★ Ctrl 多选
+      e.preventDefault();
+      toggleMultiSel(el);
+    } else {
+      // 普通单选
+      if(multiSel.length > 1 && multiSel.indexOf(el) !== -1){
+        // 已在多选中 → 直接开始移动整组
+        startMoveGroup(e);
+      } else {
+        deselectAll();
+        selectEl(el);
+        startMove(e, el);
+      }
+    }
   });
 
   slide.appendChild(el);
@@ -409,26 +384,66 @@ function createEl(d){
 }
 
 // ============================================================
-//  选中 / 取消
+//  选中 / 多选 / 取消
 // ============================================================
 function selectEl(el){
   if(selected && selected !== el) stopTextEdit(selected);
   if(selected) selected.classList.remove('selected');
   selected = el;
   el.classList.add('selected');
+  if(multiSel.indexOf(el) === -1) multiSel = [el];
   syncToolbar(el);
+  updateMultiBadge();
 }
 
-function deselect(){
-  if(selected){ stopTextEdit(selected); selected.classList.remove('selected'); selected = null; }
+function toggleMultiSel(el){
+  stopTextEdit(selected);
+  var idx = multiSel.indexOf(el);
+  if(idx !== -1){
+    // 已选中 → 取消
+    el.classList.remove('selected','multi-sel');
+    multiSel.splice(idx,1);
+    if(selected === el){
+      selected = multiSel.length ? multiSel[multiSel.length-1] : null;
+      if(selected){ selected.classList.remove('multi-sel'); selected.classList.add('selected'); }
+    }
+  } else {
+    // 加入多选
+    if(selected){ selected.classList.remove('selected'); selected.classList.add('multi-sel'); }
+    multiSel.push(el);
+    el.classList.remove('multi-sel');
+    el.classList.add('selected');
+    selected = el;
+  }
+  syncToolbar(selected);
+  updateMultiBadge();
+}
+
+function deselectAll(){
+  stopTextEdit(selected);
+  multiSel.forEach(function(el){
+    el.classList.remove('selected','multi-sel');
+  });
+  multiSel = [];
+  selected = null;
+  updateMultiBadge();
+}
+
+function updateMultiBadge(){
+  var badge = document.getElementById('multi-badge');
+  if(multiSel.length > 1){
+    badge.textContent = '已选中 '+multiSel.length+' 个元素（可一起拖动）';
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
 }
 
 function syncToolbar(el){
-  // 同步字号、颜色（读取 inner 或整体）
+  if(!el) return;
   var inner = el.querySelector('.el-text');
   if(inner){
-    var fs = parseFloat(inner.style.fontSize) || 13;
-    document.getElementById('tb-fontsize').value = fs;
+    document.getElementById('tb-fontsize').value = parseFloat(inner.style.fontSize)||13;
     var col = inner.style.color;
     if(col) document.getElementById('tb-color').value = rgbToHex(col);
   }
@@ -445,7 +460,6 @@ function startTextEdit(el){
   inner.style.userSelect = 'text';
   editingText = true;
   inner.focus();
-  // 阻止 inner 的 mousedown 冒泡到 el（避免触发移动）
   if(!inner._mdBound){
     inner._mdBound = true;
     inner.addEventListener('mousedown', function(e){ e.stopPropagation(); });
@@ -455,67 +469,53 @@ function startTextEdit(el){
 function stopTextEdit(el){
   if(!el) return;
   var inner = el.querySelector('.el-text');
-  if(inner){ inner.contentEditable = 'false'; inner.style.cursor = ''; inner.style.userSelect = ''; }
+  if(inner){ inner.contentEditable='false'; inner.style.cursor=''; inner.style.userSelect=''; }
   editingText = false;
 }
 
 // ============================================================
-//  ★ 文字格式命令（作用于当前选区 或 整个文字块）
+//  文字格式命令
 // ============================================================
 function execFmt(cmd, value, fsValue){
-  // 如果当前在文字编辑模式，对选区执行
   if(editingText && selected){
     var inner = selected.querySelector('.el-text');
     if(!inner) return;
     inner.focus();
     if(cmd === 'fontSize'){
-      // execCommand fontSize 只支持 1-7，改用 span 包裹
       var sel = window.getSelection();
       if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
-        document.execCommand('styleWithCSS', false, true);
-        document.execCommand('fontSize', false, '7'); // 先设一个占位
-        // 再把 font size=7 的 font 标签替换为 span style
-        var fonts = inner.querySelectorAll('font[size="7"]');
-        fonts.forEach(function(f){
+        document.execCommand('styleWithCSS',false,true);
+        document.execCommand('fontSize',false,'7');
+        inner.querySelectorAll('font[size="7"]').forEach(function(f){
           var span = document.createElement('span');
-          span.style.fontSize = fsValue + 'px';
+          span.style.fontSize = fsValue+'px';
           span.innerHTML = f.innerHTML;
-          f.parentNode.replaceChild(span, f);
+          f.parentNode.replaceChild(span,f);
         });
       } else {
-        // 无选区 → 改整个块
-        inner.style.fontSize = fsValue + 'px';
+        inner.style.fontSize = fsValue+'px';
       }
     } else if(cmd === 'foreColor'){
-      document.execCommand('styleWithCSS', false, true);
-      document.execCommand('foreColor', false, value);
+      document.execCommand('styleWithCSS',false,true);
+      document.execCommand('foreColor',false,value);
     } else if(cmd === 'fontName'){
-      document.execCommand('styleWithCSS', false, true);
-      document.execCommand('fontName', false, value);
+      document.execCommand('styleWithCSS',false,true);
+      document.execCommand('fontName',false,value);
     } else {
-      document.execCommand(cmd, false, value);
+      document.execCommand(cmd,false,value);
     }
-    // 更新按钮状态
     updateFmtButtons();
     return;
   }
-  // 非编辑模式 → 改整个文字块
   if(!selected) return;
   var inner = selected.querySelector('.el-text');
   if(!inner) return;
-  if(cmd === 'fontSize'){
-    inner.style.fontSize = fsValue + 'px';
-  } else if(cmd === 'foreColor'){
-    inner.style.color = value;
-  } else if(cmd === 'bold'){
-    inner.style.fontWeight = inner.style.fontWeight === 'bold' ? '' : 'bold';
-  } else if(cmd === 'italic'){
-    inner.style.fontStyle = inner.style.fontStyle === 'italic' ? '' : 'italic';
-  } else if(cmd === 'underline'){
-    inner.style.textDecoration = inner.style.textDecoration === 'underline' ? '' : 'underline';
-  } else if(cmd === 'fontName'){
-    inner.style.fontFamily = value;
-  }
+  if(cmd==='fontSize'){ inner.style.fontSize=fsValue+'px'; }
+  else if(cmd==='foreColor'){ inner.style.color=value; }
+  else if(cmd==='bold'){ inner.style.fontWeight=inner.style.fontWeight==='bold'?'':'bold'; }
+  else if(cmd==='italic'){ inner.style.fontStyle=inner.style.fontStyle==='italic'?'':'italic'; }
+  else if(cmd==='underline'){ inner.style.textDecoration=inner.style.textDecoration==='underline'?'':'underline'; }
+  else if(cmd==='fontName'){ inner.style.fontFamily=value; }
 }
 
 function updateFmtButtons(){
@@ -525,7 +525,7 @@ function updateFmtButtons(){
 }
 
 // ============================================================
-//  拖拽移动
+//  移动（单个）
 // ============================================================
 function startMove(e, el){
   dragState = {
@@ -533,6 +533,20 @@ function startMove(e, el){
     startX:e.clientX, startY:e.clientY,
     origX:parseInt(el.style.left)||0,
     origY:parseInt(el.style.top)||0
+  };
+}
+
+// ============================================================
+//  ★ 移动（多选整组）
+// ============================================================
+function startMoveGroup(e){
+  var snapshots = multiSel.map(function(el){
+    return { el:el, origX:parseInt(el.style.left)||0, origY:parseInt(el.style.top)||0 };
+  });
+  dragState = {
+    type:'moveGroup',
+    startX:e.clientX, startY:e.clientY,
+    snapshots:snapshots
   };
 }
 
@@ -557,12 +571,21 @@ function onMouseMove(e){
   if(!dragState) return;
   var dx = e.clientX - dragState.startX;
   var dy = e.clientY - dragState.startY;
-  var el = dragState.el;
+
   if(dragState.type === 'move'){
-    el.style.left = Math.max(0, dragState.origX + dx) + 'px';
-    el.style.top  = Math.max(0, dragState.origY + dy) + 'px';
-  } else {
-    var d=dragState.dir, nx=dragState.origX, ny=dragState.origY;
+    var el = dragState.el;
+    el.style.left = Math.max(0, dragState.origX+dx)+'px';
+    el.style.top  = Math.max(0, dragState.origY+dy)+'px';
+
+  } else if(dragState.type === 'moveGroup'){
+    dragState.snapshots.forEach(function(s){
+      s.el.style.left = Math.max(0, s.origX+dx)+'px';
+      s.el.style.top  = Math.max(0, s.origY+dy)+'px';
+    });
+
+  } else if(dragState.type === 'resize'){
+    var d=dragState.dir, el=dragState.el;
+    var nx=dragState.origX, ny=dragState.origY;
     var nw=dragState.origW, nh=dragState.origH;
     if(d.includes('e')) nw=Math.max(20,dragState.origW+dx);
     if(d.includes('s')) nh=Math.max(10,dragState.origH+dy);
@@ -572,6 +595,7 @@ function onMouseMove(e){
     el.style.width=nw+'px'; el.style.height=nh+'px';
   }
 }
+
 function onMouseUp(){ dragState=null; }
 
 // ============================================================
@@ -579,64 +603,83 @@ function onMouseUp(){ dragState=null; }
 // ============================================================
 function onKeyDown(e){
   if(editingText) return;
-  if(!selected) return;
-  if((e.key==='Delete'||e.key==='Backspace') && document.activeElement.tagName!=='INPUT'){
+  if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='SELECT') return;
+
+  // Delete：删除所有选中
+  if(e.key==='Delete'||e.key==='Backspace'){
     deleteSelected(); return;
   }
+  // 方向键微调（所有选中元素）
   var step = e.shiftKey ? 10 : 1;
-  if(e.key==='ArrowLeft'){  selected.style.left=(parseInt(selected.style.left)-step)+'px'; e.preventDefault(); }
-  if(e.key==='ArrowRight'){ selected.style.left=(parseInt(selected.style.left)+step)+'px'; e.preventDefault(); }
-  if(e.key==='ArrowUp'){    selected.style.top=(parseInt(selected.style.top)-step)+'px';   e.preventDefault(); }
-  if(e.key==='ArrowDown'){  selected.style.top=(parseInt(selected.style.top)+step)+'px';   e.preventDefault(); }
+  var targets = multiSel.length ? multiSel : (selected ? [selected] : []);
+  if(!targets.length) return;
+  if(e.key==='ArrowLeft'){  targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)-step)+'px'; }); e.preventDefault(); }
+  if(e.key==='ArrowRight'){ targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)+step)+'px'; }); e.preventDefault(); }
+  if(e.key==='ArrowUp'){    targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)-step)+'px'; }); e.preventDefault(); }
+  if(e.key==='ArrowDown'){  targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)+step)+'px'; }); e.preventDefault(); }
+  // Ctrl+A 全选
+  if((e.ctrlKey||e.metaKey) && e.key==='a'){
+    e.preventDefault();
+    deselectAll();
+    slide.querySelectorAll('.el').forEach(function(el){ multiSel.push(el); el.classList.add('multi-sel'); });
+    if(multiSel.length){ selected=multiSel[multiSel.length-1]; selected.classList.remove('multi-sel'); selected.classList.add('selected'); }
+    updateMultiBadge();
+  }
 }
 
 // ============================================================
-//  工具栏操作
+//  工具栏
 // ============================================================
 function bringForward(){ if(selected) selected.style.zIndex=++zCounter; }
 function sendBackward(){ if(selected){ var z=parseInt(selected.style.zIndex); if(z>1) selected.style.zIndex=z-1; } }
-function alignLeft(){   if(selected) selected.style.left='28px'; }
-function alignCenter(){ if(selected){ var w=parseInt(selected.style.width); selected.style.left=Math.round((794-w)/2)+'px'; } }
-function alignRight(){  if(selected){ var w=parseInt(selected.style.width); selected.style.left=(794-w-28)+'px'; } }
-function deleteSelected(){ if(selected){ selected.remove(); selected=null; editingText=false; } }
+function alignLeft(){
+  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
+  targets.forEach(function(el){ el.style.left='28px'; });
+}
+function alignCenter(){
+  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
+  targets.forEach(function(el){ var w=parseInt(el.style.width); el.style.left=Math.round((794-w)/2)+'px'; });
+}
+function alignRight(){
+  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
+  targets.forEach(function(el){ var w=parseInt(el.style.width); el.style.left=(794-w-28)+'px'; });
+}
+function deleteSelected(){
+  var targets=multiSel.slice();
+  targets.forEach(function(el){ el.remove(); });
+  multiSel=[]; selected=null; editingText=false;
+  updateMultiBadge();
+}
 
 function addText(){
   var el=createEl({type:'text',x:100,y:200,w:300,h:30,html:'双击编辑文字',fontSize:14,color:'#111'});
-  selectEl(el);
+  deselectAll(); selectEl(el);
 }
 function addImageEl(){
   var fi=document.getElementById('img-file-input');
   fi.onchange=function(e){
     var file=e.target.files[0]; if(!file) return;
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      var el=createEl({type:'image',x:100,y:200,w:120,h:120,src:ev.target.result});
-      selectEl(el);
-    };
-    reader.readAsDataURL(file); fi.value='';
+    var r=new FileReader();
+    r.onload=function(ev){ var el=createEl({type:'image',x:100,y:200,w:120,h:120,src:ev.target.result}); deselectAll(); selectEl(el); };
+    r.readAsDataURL(file); fi.value='';
   };
   fi.click();
 }
 function addLine(){
   var el=createEl({type:'line',x:28,y:300,w:730,h:4,color:'#2c3e50'});
-  selectEl(el);
+  deselectAll(); selectEl(el);
 }
-
-// 替换选中图片（工具栏按钮）
 function replaceSelectedImg(){
-  if(!selected || selected.dataset.eltype !== 'image') return;
+  if(!selected||selected.dataset.eltype!=='image') return;
   replaceImgEl(selected);
 }
 function replaceImgEl(el){
   var fi=document.getElementById('img-file-input');
   fi.onchange=function(e){
     var file=e.target.files[0]; if(!file) return;
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      var img=el.querySelector('.el-img');
-      if(img) img.src=ev.target.result;
-    };
-    reader.readAsDataURL(file); fi.value='';
+    var r=new FileReader();
+    r.onload=function(ev){ var img=el.querySelector('.el-img'); if(img) img.src=ev.target.result; };
+    r.readAsDataURL(file); fi.value='';
   };
   fi.click();
 }
@@ -646,9 +689,9 @@ function replaceImgEl(el){
 // ============================================================
 function saveHTML(){
   var clone=document.getElementById('slide').cloneNode(true);
-  clone.querySelectorAll('.handle,.el-border,.img-replace-hint').forEach(function(n){n.remove();});
+  clone.querySelectorAll('.handle,.el-border,.img-hint').forEach(function(n){n.remove();});
   clone.querySelectorAll('.el').forEach(function(el){
-    el.classList.remove('selected');
+    el.classList.remove('selected','multi-sel');
     var inner=el.querySelector('.el-text');
     if(inner) inner.removeAttribute('contenteditable');
   });
@@ -671,9 +714,6 @@ function rgbToHex(rgb){
   return '#'+m.slice(0,3).map(function(x){return('0'+parseInt(x).toString(16)).slice(-2);}).join('');
 }
 
-// ============================================================
-//  启动
-// ============================================================
 init();
 </script>
 </body>
