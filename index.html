@@ -29,22 +29,40 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 .tbtn.on{background:#2980b9;border-color:#2980b9;color:#fff;}
 .tbtn.green{background:#27ae60;border-color:#27ae60;color:#fff;}
 .tbtn.green:hover{background:#1e8449;}
+.tbtn.orange{background:#e67e22;border-color:#e67e22;color:#fff;}
+.tbtn.orange:hover{background:#ca6f1e;}
 .tbtn.red{background:#c0392b;border-color:#c0392b;color:#fff;}
 .tbtn.red:hover{background:#a93226;}
 #tb-fontsize{
-  width:42px;padding:3px 4px;border:1px solid #3d5166;
+  width:46px;padding:3px 4px;border:1px solid #3d5166;
   background:#2d3e50;color:#ddd;border-radius:4px;
   font-size:12px;text-align:center;flex-shrink:0;
 }
 #tb-color{width:30px;height:26px;border:none;padding:0;cursor:pointer;border-radius:3px;background:none;flex-shrink:0;}
 #tb-font{background:#2d3e50;color:#ccc;border:1px solid #3d5166;border-radius:4px;padding:3px 4px;font-size:12px;flex-shrink:0;}
 
-/* 多选提示角标 */
+/* 字号快捷按钮 */
+.fs-quick{
+  background:#253545;border:1px solid #3d5166;color:#aac;
+  padding:3px 6px;border-radius:3px;cursor:pointer;
+  font-size:11px;font-family:Arial;flex-shrink:0;
+}
+.fs-quick:hover{background:#2980b9;color:#fff;}
+
+/* 多选提示 */
 #multi-badge{
   position:fixed;top:54px;left:50%;transform:translateX(-50%);
   background:#2980b9;color:#fff;font-size:11px;font-family:Arial;
-  padding:3px 12px;border-radius:12px;z-index:9998;
+  padding:3px 14px;border-radius:12px;z-index:9998;
   display:none;pointer-events:none;
+}
+
+/* 保存状态提示 */
+#save-toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  background:#27ae60;color:#fff;font-size:13px;font-family:Arial;
+  padding:8px 24px;border-radius:20px;z-index:9999;
+  display:none;box-shadow:0 2px 12px rgba(0,0,0,.3);
 }
 
 /* ===== 画布 ===== */
@@ -60,7 +78,6 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 .el:hover .el-border{opacity:1;}
 .el.selected .el-border{opacity:1;border-color:#2980b9;}
 .el.multi-sel .el-border{opacity:1;border-color:#e67e22;}
-
 .el-border{
   position:absolute;inset:-2px;
   border:2px dashed rgba(100,160,220,.65);
@@ -69,7 +86,7 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 }
 .el.multi-sel .el-border{border-color:rgba(230,126,34,.8);}
 
-/* 控制点 —— 只在主选中时显示 */
+/* 控制点 */
 .handle{
   position:absolute;width:9px;height:9px;
   background:#fff;border:2px solid #2980b9;
@@ -113,7 +130,7 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 /* ===== 打印 ===== */
 @media print{
   body{background:#fff;}
-  #toolbar,#multi-badge{display:none!important;}
+  #toolbar,#multi-badge,#save-toast{display:none!important;}
   #canvas-wrap{margin:0;width:100%;}
   #slide{box-shadow:none;}
   .el-border,.handle,.img-hint{display:none!important;}
@@ -132,27 +149,36 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
   <button class="tbtn" onclick="addLine()">＋横线</button>
   <div class="sep"></div>
 
+  <!-- 字号区域 -->
   <span class="tlabel">字号</span>
-  <input id="tb-fontsize" type="number" value="13" min="6" max="120"
-    title="选中文字后修改字号（可先用鼠标选中部分文字再改）"
-    onchange="execFmt('fontSize',null,this.value)"
-    oninput="execFmt('fontSize',null,this.value)"/>
+  <input id="tb-fontsize" type="number" value="13" min="6" max="200"
+    title="输入字号后按 Enter 应用（可先选中部分文字再改）"
+    onkeydown="if(event.key==='Enter'){applyFontSize();event.preventDefault();}"/>
+  <button class="tbtn" style="padding:4px 6px;" onclick="applyFontSize()" title="应用字号">✓</button>
+  <!-- 快捷字号 -->
+  <button class="fs-quick" onclick="setFontSize(10)">10</button>
+  <button class="fs-quick" onclick="setFontSize(12)">12</button>
+  <button class="fs-quick" onclick="setFontSize(14)">14</button>
+  <button class="fs-quick" onclick="setFontSize(16)">16</button>
+  <button class="fs-quick" onclick="setFontSize(20)">20</button>
+  <button class="fs-quick" onclick="setFontSize(28)">28</button>
 
+  <div class="sep"></div>
   <span class="tlabel">颜色</span>
-  <input id="tb-color" type="color" value="#111111" onchange="execFmt('foreColor',this.value)"/>
+  <input id="tb-color" type="color" value="#111111" onchange="applyColor(this.value)"/>
 
-  <button class="tbtn" id="btn-bold"   onclick="execFmt('bold')"      title="加粗"><b>B</b></button>
-  <button class="tbtn" id="btn-italic" onclick="execFmt('italic')"    title="斜体"><i>I</i></button>
-  <button class="tbtn" id="btn-under"  onclick="execFmt('underline')" title="下划线"><u>U</u></button>
+  <button class="tbtn" id="btn-bold"   onclick="toggleBold()"      title="加粗 Ctrl+B"><b>B</b></button>
+  <button class="tbtn" id="btn-italic" onclick="toggleItalic()"    title="斜体 Ctrl+I"><i>I</i></button>
+  <button class="tbtn" id="btn-under"  onclick="toggleUnderline()" title="下划线"><u>U</u></button>
 
   <span class="tlabel">字体</span>
-  <select id="tb-font" onchange="execFmt('fontName',this.value)">
-    <option value="SimSun,宋体">宋体</option>
-    <option value="SimHei,黑体,Microsoft YaHei">黑体</option>
-    <option value="KaiTi,楷体">楷体</option>
-    <option value="Microsoft YaHei,微软雅黑">微软雅黑</option>
-    <option value="Arial">Arial</option>
-    <option value="Times New Roman">Times New Roman</option>
+  <select id="tb-font" onchange="applyFontFamily(this.value)">
+    <option value="SimSun,宋体,serif">宋体</option>
+    <option value="SimHei,黑体,Microsoft YaHei,sans-serif">黑体</option>
+    <option value="KaiTi,楷体,STKaiti,serif">楷体</option>
+    <option value="Microsoft YaHei,微软雅黑,sans-serif">微软雅黑</option>
+    <option value="Arial,sans-serif">Arial</option>
+    <option value="Times New Roman,serif">Times New Roman</option>
   </select>
   <div class="sep"></div>
 
@@ -163,15 +189,17 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
   <button class="tbtn" onclick="alignRight()"  title="右对齐">→⬛</button>
   <div class="sep"></div>
 
-  <button class="tbtn" id="btn-replace-img" onclick="replaceSelectedImg()" title="替换选中图片">🖼 换图</button>
+  <button class="tbtn" onclick="replaceSelectedImg()" title="替换选中图片">🖼 换图</button>
   <div class="sep"></div>
 
-  <button class="tbtn red"   onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
-  <button class="tbtn green" onclick="saveHTML()">💾 保存</button>
-  <button class="tbtn"       onclick="window.print()">🖨️ 打印/PDF</button>
+  <button class="tbtn red"    onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
+  <button class="tbtn orange" onclick="saveToGitHub()"   title="保存并推送到 GitHub，约1分钟后网址更新">☁ 保存到网址</button>
+  <button class="tbtn green"  onclick="saveHTML()">💾 下载</button>
+  <button class="tbtn"        onclick="window.print()">🖨️ 打印/PDF</button>
 </div>
 
 <div id="multi-badge"></div>
+<div id="save-toast"></div>
 <input type="file" id="img-file-input" accept="image/*" style="display:none"/>
 
 <div id="canvas-wrap">
@@ -179,6 +207,15 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
 </div>
 
 <script>
+// ============================================================
+//  GitHub 配置（用于一键保存到网址）
+// ============================================================
+var GH_TOKEN = localStorage.getItem('gh_token') || '';
+var GH_OWNER = 'ching12333';
+var GH_REPO  = 'resume-luteng';
+var GH_PATH  = 'index.html';
+var GH_BRANCH= 'main';
+
 // ============================================================
 //  初始元素数据
 // ============================================================
@@ -273,12 +310,12 @@ var INIT_ELEMENTS = [
 // ============================================================
 //  状态
 // ============================================================
-var selected   = null;   // 主选中元素
-var multiSel   = [];     // 多选元素列表（含主选中）
+var selected    = null;
+var multiSel    = [];
 var editingText = false;
-var dragState  = null;
-var zCounter   = 10;
-var slide      = document.getElementById('slide');
+var dragState   = null;
+var zCounter    = 10;
+var slide       = document.getElementById('slide');
 
 // ============================================================
 //  初始化
@@ -317,9 +354,7 @@ function createEl(d){
     el.dataset.eltype = 'text';
     var inner = document.createElement('div');
     inner.className = 'el-text';
-    inner.style.fontSize = (d.fontSize||13)+'px';
-    inner.style.color = d.color||'#111';
-    inner.innerHTML = d.html||'';
+    inner.innerHTML = d.html || '';
     el.appendChild(inner);
     el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
 
@@ -350,31 +385,22 @@ function createEl(d){
   }
 
   el.addEventListener('mousedown', function(e){
-    // 控制点 → 缩放
     if(e.target.classList.contains('handle')){
       e.stopPropagation(); e.preventDefault();
-      deselectAll();
-      selectEl(el);
+      deselectAll(); selectEl(el);
       startResize(e, e.target.dataset.dir, el);
       return;
     }
-    // 文字编辑中点自身 → 不拦截
     if(editingText && el === selected) return;
     e.stopPropagation();
-
     if(e.ctrlKey || e.metaKey){
-      // ★ Ctrl 多选
       e.preventDefault();
       toggleMultiSel(el);
     } else {
-      // 普通单选
       if(multiSel.length > 1 && multiSel.indexOf(el) !== -1){
-        // 已在多选中 → 直接开始移动整组
         startMoveGroup(e);
       } else {
-        deselectAll();
-        selectEl(el);
-        startMove(e, el);
+        deselectAll(); selectEl(el); startMove(e, el);
       }
     }
   });
@@ -400,7 +426,6 @@ function toggleMultiSel(el){
   stopTextEdit(selected);
   var idx = multiSel.indexOf(el);
   if(idx !== -1){
-    // 已选中 → 取消
     el.classList.remove('selected','multi-sel');
     multiSel.splice(idx,1);
     if(selected === el){
@@ -408,11 +433,9 @@ function toggleMultiSel(el){
       if(selected){ selected.classList.remove('multi-sel'); selected.classList.add('selected'); }
     }
   } else {
-    // 加入多选
     if(selected){ selected.classList.remove('selected'); selected.classList.add('multi-sel'); }
     multiSel.push(el);
-    el.classList.remove('multi-sel');
-    el.classList.add('selected');
+    el.classList.remove('multi-sel'); el.classList.add('selected');
     selected = el;
   }
   syncToolbar(selected);
@@ -421,11 +444,8 @@ function toggleMultiSel(el){
 
 function deselectAll(){
   stopTextEdit(selected);
-  multiSel.forEach(function(el){
-    el.classList.remove('selected','multi-sel');
-  });
-  multiSel = [];
-  selected = null;
+  multiSel.forEach(function(el){ el.classList.remove('selected','multi-sel'); });
+  multiSel = []; selected = null;
   updateMultiBadge();
 }
 
@@ -443,9 +463,12 @@ function syncToolbar(el){
   if(!el) return;
   var inner = el.querySelector('.el-text');
   if(inner){
-    document.getElementById('tb-fontsize').value = parseFloat(inner.style.fontSize)||13;
-    var col = inner.style.color;
-    if(col) document.getElementById('tb-color').value = rgbToHex(col);
+    // 读取第一个 span 的字号，或 inner 自身
+    var firstSpan = inner.querySelector('[style*="font-size"]');
+    var fs = firstSpan
+      ? parseFloat(firstSpan.style.fontSize)
+      : parseFloat(inner.style.fontSize) || 13;
+    document.getElementById('tb-fontsize').value = fs || 13;
   }
 }
 
@@ -463,6 +486,9 @@ function startTextEdit(el){
   if(!inner._mdBound){
     inner._mdBound = true;
     inner.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    // 选区变化时同步字号显示
+    inner.addEventListener('keyup',    syncSelectionFontSize);
+    inner.addEventListener('mouseup',  syncSelectionFontSize);
   }
 }
 
@@ -473,59 +499,187 @@ function stopTextEdit(el){
   editingText = false;
 }
 
+// 读取当前光标处字号并同步到工具栏
+function syncSelectionFontSize(){
+  var sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0) return;
+  var node = sel.anchorNode;
+  if(!node) return;
+  var el = node.nodeType === 3 ? node.parentElement : node;
+  // 向上找最近有 font-size 的元素
+  while(el && el.className !== 'el-text'){
+    if(el.style && el.style.fontSize){
+      document.getElementById('tb-fontsize').value = parseFloat(el.style.fontSize);
+      return;
+    }
+    el = el.parentElement;
+  }
+}
+
 // ============================================================
-//  文字格式命令
+//  ★ 字体大小（核心修复）
+//  原理：用 <span style="font-size:Xpx"> 包裹选区，避免 execCommand 兼容问题
 // ============================================================
-function execFmt(cmd, value, fsValue){
+function applyFontSize(){
+  var fs = parseFloat(document.getElementById('tb-fontsize').value);
+  if(!fs || fs < 1) return;
+  setFontSize(fs);
+}
+
+function setFontSize(fs){
+  document.getElementById('tb-fontsize').value = fs;
   if(editingText && selected){
     var inner = selected.querySelector('.el-text');
     if(!inner) return;
     inner.focus();
-    if(cmd === 'fontSize'){
-      var sel = window.getSelection();
-      if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
-        document.execCommand('styleWithCSS',false,true);
-        document.execCommand('fontSize',false,'7');
-        inner.querySelectorAll('font[size="7"]').forEach(function(f){
-          var span = document.createElement('span');
-          span.style.fontSize = fsValue+'px';
-          span.innerHTML = f.innerHTML;
-          f.parentNode.replaceChild(span,f);
-        });
-      } else {
-        inner.style.fontSize = fsValue+'px';
-      }
-    } else if(cmd === 'foreColor'){
-      document.execCommand('styleWithCSS',false,true);
-      document.execCommand('foreColor',false,value);
-    } else if(cmd === 'fontName'){
-      document.execCommand('styleWithCSS',false,true);
-      document.execCommand('fontName',false,value);
+    var sel = window.getSelection();
+    // ★ 有选区 → 只改选中文字
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      var range = sel.getRangeAt(0);
+      // 提取选区内容
+      var fragment = range.extractContents();
+      var span = document.createElement('span');
+      span.style.fontSize = fs + 'px';
+      span.appendChild(fragment);
+      range.insertNode(span);
+      // 重新选中新 span
+      var newRange = document.createRange();
+      newRange.selectNodeContents(span);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
     } else {
-      document.execCommand(cmd,false,value);
+      // 无选区 → 改整个文字块
+      inner.style.fontSize = fs + 'px';
     }
-    updateFmtButtons();
-    return;
+  } else if(selected){
+    // 非编辑模式 → 改整个块
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.fontSize = fs + 'px';
   }
-  if(!selected) return;
-  var inner = selected.querySelector('.el-text');
-  if(!inner) return;
-  if(cmd==='fontSize'){ inner.style.fontSize=fsValue+'px'; }
-  else if(cmd==='foreColor'){ inner.style.color=value; }
-  else if(cmd==='bold'){ inner.style.fontWeight=inner.style.fontWeight==='bold'?'':'bold'; }
-  else if(cmd==='italic'){ inner.style.fontStyle=inner.style.fontStyle==='italic'?'':'italic'; }
-  else if(cmd==='underline'){ inner.style.textDecoration=inner.style.textDecoration==='underline'?'':'underline'; }
-  else if(cmd==='fontName'){ inner.style.fontFamily=value; }
-}
-
-function updateFmtButtons(){
-  document.getElementById('btn-bold').classList.toggle('on', document.queryCommandState('bold'));
-  document.getElementById('btn-italic').classList.toggle('on', document.queryCommandState('italic'));
-  document.getElementById('btn-under').classList.toggle('on', document.queryCommandState('underline'));
 }
 
 // ============================================================
-//  移动（单个）
+//  颜色
+// ============================================================
+function applyColor(val){
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(!inner) return;
+    inner.focus();
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      var range = sel.getRangeAt(0);
+      var fragment = range.extractContents();
+      var span = document.createElement('span');
+      span.style.color = val;
+      span.appendChild(fragment);
+      range.insertNode(span);
+    } else {
+      inner.style.color = val;
+    }
+  } else if(selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.color = val;
+  }
+}
+
+// ============================================================
+//  加粗 / 斜体 / 下划线
+// ============================================================
+function wrapSelection(styleProp, onVal, offVal){
+  if(!editingText || !selected) return;
+  var inner = selected.querySelector('.el-text');
+  if(!inner) return;
+  inner.focus();
+  var sel = window.getSelection();
+  if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+    var range = sel.getRangeAt(0);
+    var fragment = range.extractContents();
+    var span = document.createElement('span');
+    span.style[styleProp] = onVal;
+    span.appendChild(fragment);
+    range.insertNode(span);
+  } else {
+    var cur = inner.style[styleProp];
+    inner.style[styleProp] = (cur === onVal) ? offVal : onVal;
+  }
+}
+
+function toggleBold(){
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(!inner) return;
+    inner.focus();
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      document.execCommand('bold');
+    } else {
+      inner.style.fontWeight = inner.style.fontWeight === 'bold' ? '' : 'bold';
+    }
+  } else if(selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.fontWeight = inner.style.fontWeight === 'bold' ? '' : 'bold';
+  }
+}
+
+function toggleItalic(){
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(!inner) return;
+    inner.focus();
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      document.execCommand('italic');
+    } else {
+      inner.style.fontStyle = inner.style.fontStyle === 'italic' ? '' : 'italic';
+    }
+  } else if(selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.fontStyle = inner.style.fontStyle === 'italic' ? '' : 'italic';
+  }
+}
+
+function toggleUnderline(){
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(!inner) return;
+    inner.focus();
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      document.execCommand('underline');
+    } else {
+      inner.style.textDecoration = inner.style.textDecoration === 'underline' ? '' : 'underline';
+    }
+  } else if(selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.textDecoration = inner.style.textDecoration === 'underline' ? '' : 'underline';
+  }
+}
+
+function applyFontFamily(val){
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(!inner) return;
+    inner.focus();
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
+      var range = sel.getRangeAt(0);
+      var fragment = range.extractContents();
+      var span = document.createElement('span');
+      span.style.fontFamily = val;
+      span.appendChild(fragment);
+      range.insertNode(span);
+    } else {
+      inner.style.fontFamily = val;
+    }
+  } else if(selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner) inner.style.fontFamily = val;
+  }
+}
+
+// ============================================================
+//  移动（单个 / 多选组）
 // ============================================================
 function startMove(e, el){
   dragState = {
@@ -536,23 +690,13 @@ function startMove(e, el){
   };
 }
 
-// ============================================================
-//  ★ 移动（多选整组）
-// ============================================================
 function startMoveGroup(e){
   var snapshots = multiSel.map(function(el){
     return { el:el, origX:parseInt(el.style.left)||0, origY:parseInt(el.style.top)||0 };
   });
-  dragState = {
-    type:'moveGroup',
-    startX:e.clientX, startY:e.clientY,
-    snapshots:snapshots
-  };
+  dragState = { type:'moveGroup', startX:e.clientX, startY:e.clientY, snapshots:snapshots };
 }
 
-// ============================================================
-//  缩放
-// ============================================================
 function startResize(e, dir, el){
   dragState = {
     type:'resize', dir:dir, el:el,
@@ -564,25 +708,18 @@ function startResize(e, dir, el){
   };
 }
 
-// ============================================================
-//  全局鼠标移动 / 抬起
-// ============================================================
 function onMouseMove(e){
   if(!dragState) return;
   var dx = e.clientX - dragState.startX;
   var dy = e.clientY - dragState.startY;
-
   if(dragState.type === 'move'){
-    var el = dragState.el;
-    el.style.left = Math.max(0, dragState.origX+dx)+'px';
-    el.style.top  = Math.max(0, dragState.origY+dy)+'px';
-
+    dragState.el.style.left = Math.max(0, dragState.origX+dx)+'px';
+    dragState.el.style.top  = Math.max(0, dragState.origY+dy)+'px';
   } else if(dragState.type === 'moveGroup'){
     dragState.snapshots.forEach(function(s){
       s.el.style.left = Math.max(0, s.origX+dx)+'px';
       s.el.style.top  = Math.max(0, s.origY+dy)+'px';
     });
-
   } else if(dragState.type === 'resize'){
     var d=dragState.dir, el=dragState.el;
     var nx=dragState.origX, ny=dragState.origY;
@@ -595,7 +732,6 @@ function onMouseMove(e){
     el.style.width=nw+'px'; el.style.height=nh+'px';
   }
 }
-
 function onMouseUp(){ dragState=null; }
 
 // ============================================================
@@ -603,13 +739,9 @@ function onMouseUp(){ dragState=null; }
 // ============================================================
 function onKeyDown(e){
   if(editingText) return;
-  if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='SELECT') return;
-
-  // Delete：删除所有选中
-  if(e.key==='Delete'||e.key==='Backspace'){
-    deleteSelected(); return;
-  }
-  // 方向键微调（所有选中元素）
+  var tag = document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA') return;
+  if(e.key==='Delete'||e.key==='Backspace'){ deleteSelected(); return; }
   var step = e.shiftKey ? 10 : 1;
   var targets = multiSel.length ? multiSel : (selected ? [selected] : []);
   if(!targets.length) return;
@@ -617,7 +749,6 @@ function onKeyDown(e){
   if(e.key==='ArrowRight'){ targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)+step)+'px'; }); e.preventDefault(); }
   if(e.key==='ArrowUp'){    targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)-step)+'px'; }); e.preventDefault(); }
   if(e.key==='ArrowDown'){  targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)+step)+'px'; }); e.preventDefault(); }
-  // Ctrl+A 全选
   if((e.ctrlKey||e.metaKey) && e.key==='a'){
     e.preventDefault();
     deselectAll();
@@ -628,31 +759,17 @@ function onKeyDown(e){
 }
 
 // ============================================================
-//  工具栏
+//  工具栏操作
 // ============================================================
 function bringForward(){ if(selected) selected.style.zIndex=++zCounter; }
 function sendBackward(){ if(selected){ var z=parseInt(selected.style.zIndex); if(z>1) selected.style.zIndex=z-1; } }
-function alignLeft(){
-  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
-  targets.forEach(function(el){ el.style.left='28px'; });
-}
-function alignCenter(){
-  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
-  targets.forEach(function(el){ var w=parseInt(el.style.width); el.style.left=Math.round((794-w)/2)+'px'; });
-}
-function alignRight(){
-  var targets=multiSel.length?multiSel:(selected?[selected]:[]);
-  targets.forEach(function(el){ var w=parseInt(el.style.width); el.style.left=(794-w-28)+'px'; });
-}
-function deleteSelected(){
-  var targets=multiSel.slice();
-  targets.forEach(function(el){ el.remove(); });
-  multiSel=[]; selected=null; editingText=false;
-  updateMultiBadge();
-}
+function alignLeft(){   var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){el.style.left='28px';}); }
+function alignCenter(){ var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=Math.round((794-w)/2)+'px';}); }
+function alignRight(){  var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=(794-w-28)+'px';}); }
+function deleteSelected(){ var t=multiSel.slice(); t.forEach(function(el){el.remove();}); multiSel=[]; selected=null; editingText=false; updateMultiBadge(); }
 
 function addText(){
-  var el=createEl({type:'text',x:100,y:200,w:300,h:30,html:'双击编辑文字',fontSize:14,color:'#111'});
+  var el=createEl({type:'text',x:100,y:200,w:300,h:30,html:'<span style="font-size:14px;color:#111;">双击编辑文字</span>'});
   deselectAll(); selectEl(el);
 }
 function addImageEl(){
@@ -685,22 +802,91 @@ function replaceImgEl(el){
 }
 
 // ============================================================
-//  保存 HTML
+//  生成干净 HTML（用于保存 / 推送）
 // ============================================================
-function saveHTML(){
-  var clone=document.getElementById('slide').cloneNode(true);
+function buildCleanHTML(){
+  var clone = document.getElementById('slide').cloneNode(true);
   clone.querySelectorAll('.handle,.el-border,.img-hint').forEach(function(n){n.remove();});
   clone.querySelectorAll('.el').forEach(function(el){
     el.classList.remove('selected','multi-sel');
-    var inner=el.querySelector('.el-text');
+    var inner = el.querySelector('.el-text');
     if(inner) inner.removeAttribute('contenteditable');
   });
-  var out='<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8"/>\n<title>卢腾 - 个人简历</title>\n'
-    +'<style>body{margin:0;background:#fff;}#slide{width:794px;min-height:1123px;position:relative;margin:0 auto;}.el{position:absolute;}.el-text{width:100%;height:100%;overflow:hidden;line-height:1.55;word-break:break-word;white-space:pre-wrap;}.el-img-wrap{width:100%;height:100%;overflow:hidden;}.el-img{width:100%;height:100%;object-fit:contain;display:block;}.el-line{position:relative;width:100%;height:100%;}.el-line svg{position:absolute;inset:0;width:100%;height:100%;}</style>\n'
-    +'</head>\n<body>\n'+clone.outerHTML+'\n</body>\n</html>';
-  var blob=new Blob([out],{type:'text/html;charset=utf-8'});
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download='卢腾-简历.html'; a.click();
+  return '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8"/>\n<title>卢腾 - 个人简历</title>\n'
+    +'<style>body{margin:0;background:#fff;}#slide{width:794px;min-height:1123px;position:relative;margin:0 auto;}'
+    +'.el{position:absolute;}.el-text{width:100%;height:100%;overflow:hidden;line-height:1.55;word-break:break-word;white-space:pre-wrap;}'
+    +'.el-img-wrap{width:100%;height:100%;overflow:hidden;}.el-img{width:100%;height:100%;object-fit:contain;display:block;}'
+    +'.el-line{position:relative;width:100%;height:100%;}.el-line svg{position:absolute;inset:0;width:100%;height:100%;}'
+    +'</style>\n</head>\n<body>\n'+clone.outerHTML+'\n</body>\n</html>';
+}
+
+// ============================================================
+//  ★ 一键保存到 GitHub（直接更新网址）
+// ============================================================
+function saveToGitHub(){
+  // 如果没有 Token，提示输入并保存到本地
+  if(!GH_TOKEN){
+    var t = prompt('请输入您的 GitHub Personal Access Token（仅存在您的浏览器本地，不会上传）：');
+    if(!t) return;
+    GH_TOKEN = t.trim();
+    localStorage.setItem('gh_token', GH_TOKEN);
+  }
+  var toast = document.getElementById('save-toast');
+  toast.textContent = '⏳ 正在保存到 GitHub...';
+  toast.style.background = '#2980b9';
+  toast.style.display = 'block';
+
+  var html = buildCleanHTML();
+  var encoded = btoa(unescape(encodeURIComponent(html)));
+
+  // 先获取当前文件的 SHA（更新文件需要）
+  fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH+'?ref='+GH_BRANCH, {
+    headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var sha = data.sha;
+    return fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_PATH, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token '+GH_TOKEN,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: '简历更新 '+new Date().toLocaleString('zh-CN'),
+        content: encoded,
+        sha: sha,
+        branch: GH_BRANCH
+      })
+    });
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(data.content || data.commit){
+      toast.textContent = '✅ 已保存！约 1 分钟后网址自动更新';
+      toast.style.background = '#27ae60';
+    } else {
+      toast.textContent = '❌ 保存失败：'+(data.message||'未知错误');
+      toast.style.background = '#c0392b';
+    }
+    setTimeout(function(){ toast.style.display='none'; }, 4000);
+  })
+  .catch(function(err){
+    toast.textContent = '❌ 网络错误：'+err.message;
+    toast.style.background = '#c0392b';
+    setTimeout(function(){ toast.style.display='none'; }, 4000);
+  });
+}
+
+// ============================================================
+//  下载 HTML
+// ============================================================
+function saveHTML(){
+  var out = buildCleanHTML();
+  var blob = new Blob([out],{type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download='卢腾-简历.html'; a.click();
 }
 
 // ============================================================
