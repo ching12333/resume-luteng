@@ -1,0 +1,155 @@
+/* ============================================================
+ *  简历编辑器 - 样式表 (editor.css)
+ *  此文件包含编辑器的所有 CSS 样式
+ *  与简历数据分离，可独立更新
+ * ============================================================ */
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sans-serif;user-select:none;}
+
+/* ===== 工具栏 ===== */
+#toolbar{
+  position:fixed;top:0;left:0;right:0;height:48px;
+  background:#1e2a38;display:flex;align-items:center;
+  gap:4px;padding:0 10px;z-index:9999;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);overflow-x:auto;
+}
+#toolbar::-webkit-scrollbar{height:3px;}
+#toolbar::-webkit-scrollbar-thumb{background:#444;}
+.sep{width:1px;height:28px;background:#3d5166;margin:0 3px;flex-shrink:0;}
+.tlabel{color:#8aaccc;font-size:11px;font-family:Arial;white-space:nowrap;flex-shrink:0;}
+.tbtn{
+  background:#2d3e50;border:1px solid #3d5166;color:#ccc;
+  padding:4px 8px;border-radius:4px;cursor:pointer;
+  font-size:12px;font-family:Arial;white-space:nowrap;flex-shrink:0;
+  transition:background .12s;line-height:1.4;
+}
+.tbtn:hover{background:#3d5166;color:#fff;}
+.tbtn.on{background:#2980b9;border-color:#2980b9;color:#fff;}
+.tbtn.green{background:#27ae60;border-color:#27ae60;color:#fff;}
+.tbtn.green:hover{background:#1e8449;}
+.tbtn.orange{background:#e67e22;border-color:#e67e22;color:#fff;}
+.tbtn.orange:hover{background:#ca6f1e;}
+.tbtn.red{background:#c0392b;border-color:#c0392b;color:#fff;}
+.tbtn.red:hover{background:#a93226;}
+#tb-fontsize{
+  width:46px;padding:3px 4px;border:1px solid #3d5166;
+  background:#2d3e50;color:#ddd;border-radius:4px;
+  font-size:12px;text-align:center;flex-shrink:0;
+}
+#tb-color{width:30px;height:26px;border:none;padding:0;cursor:pointer;border-radius:3px;background:none;flex-shrink:0;}
+#tb-font{background:#2d3e50;color:#ccc;border:1px solid #3d5166;border-radius:4px;padding:3px 4px;font-size:12px;flex-shrink:0;}
+
+/* 字号快捷按钮 */
+.fs-quick{
+  background:#253545;border:1px solid #3d5166;color:#aac;
+  padding:3px 6px;border-radius:3px;cursor:pointer;
+  font-size:11px;font-family:Arial;flex-shrink:0;
+}
+.fs-quick:hover{background:#2980b9;color:#fff;}
+
+/* 多选提示 */
+#multi-badge{
+  position:fixed;top:54px;left:50%;transform:translateX(-50%);
+  background:#2980b9;color:#fff;font-size:11px;font-family:Arial;
+  padding:3px 14px;border-radius:12px;z-index:9998;
+  display:none;pointer-events:none;
+}
+
+/* 保存状态提示 */
+#save-toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  background:#27ae60;color:#fff;font-size:13px;font-family:Arial;
+  padding:8px 24px;border-radius:20px;z-index:9999;
+  display:none;box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+
+/* ===== 画布 ===== */
+#canvas-wrap{margin:58px auto 40px;width:794px;}
+#slide{
+  width:794px;min-height:1123px;background:#fff;
+  position:relative;box-shadow:0 4px 24px rgba(0,0,0,.35);
+  overflow:visible;
+}
+
+/* ===== 元素 ===== */
+.el{position:absolute;cursor:move;min-width:20px;min-height:12px;}
+.el:hover .el-border{opacity:1;}
+.el.selected .el-border{opacity:1;border-color:#2980b9;}
+.el.multi-sel .el-border{opacity:1;border-color:#e67e22;}
+.el-border{
+  position:absolute;inset:-2px;
+  border:2px dashed rgba(100,160,220,.65);
+  border-radius:2px;pointer-events:none;opacity:0;
+  transition:opacity .1s;z-index:10;
+}
+.el.multi-sel .el-border{border-color:rgba(230,126,34,.8);}
+
+/* 控制点 */
+.handle{
+  position:absolute;width:9px;height:9px;
+  background:#fff;border:2px solid #2980b9;
+  border-radius:50%;z-index:20;display:none;
+}
+.el.selected .handle{display:block;}
+.handle.nw{top:-6px;left:-6px;cursor:nw-resize;}
+.handle.n {top:-6px;left:calc(50% - 4px);cursor:n-resize;}
+.handle.ne{top:-6px;right:-6px;cursor:ne-resize;}
+.handle.e {top:calc(50% - 4px);right:-6px;cursor:e-resize;}
+.handle.se{bottom:-6px;right:-6px;cursor:se-resize;}
+.handle.s {bottom:-6px;left:calc(50% - 4px);cursor:s-resize;}
+.handle.sw{bottom:-6px;left:-6px;cursor:sw-resize;}
+.handle.w {top:calc(50% - 4px);left:-6px;cursor:w-resize;}
+
+/* ===== 文字 ===== */
+.el-text{
+  width:100%;height:100%;
+  overflow:visible;line-height:1.55;
+  word-break:break-word;white-space:pre-wrap;
+}
+.el-text[contenteditable="true"]{
+  outline:none;cursor:text;overflow:visible;user-select:text;
+}
+
+/* ===== 图片 ===== */
+.el-img-wrap{width:100%;height:100%;position:relative;overflow:hidden;}
+.el-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
+.img-hint{
+  position:absolute;inset:0;background:rgba(0,0,0,0);
+  display:flex;align-items:center;justify-content:center;
+  color:transparent;font-size:11px;font-family:Arial;
+  transition:background .15s,color .15s;pointer-events:none;border-radius:2px;
+}
+.el:hover .img-hint{background:rgba(0,0,0,.4);color:#fff;}
+
+/* ===== 线条 ===== */
+.el-line{position:relative;width:100%;height:100%;}
+.el-line svg{position:absolute;inset:0;width:100%;height:100%;}
+
+/* ===== 紫色边框装饰框 ===== */
+.el-rect{
+  width:100%;height:100%;
+  border:2px solid #660974;
+  border-radius:2px;
+  box-sizing:border-box;
+  pointer-events:none;
+}
+
+/* ===== 星星装饰 ===== */
+.el-star{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  color:#660974;font-size:16px;
+  pointer-events:none;
+  user-select:none;
+  line-height:1;
+}
+
+/* ===== 打印 ===== */
+@media print{
+  body{background:#fff;}
+  #toolbar,#multi-badge,#save-toast{display:none!important;}
+  #canvas-wrap{margin:0;width:100%;}
+  #slide{box-shadow:none;}
+  .el-border,.handle,.img-hint{display:none!important;}
+}
