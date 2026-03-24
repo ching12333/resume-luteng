@@ -105,16 +105,6 @@ var INIT_ELEMENTS = [
     "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 科研经历</span>"
   },
   {
-    "id": "e_line1",
-    "type": "line",
-    "x": 28,
-    "y": 174,
-    "w": 730,
-    "h": 2,
-    "z": 21,
-    "color": "#2c3e50"
-  },
-  {
     "id": "e_r1t",
     "type": "text",
     "x": 25,
@@ -132,7 +122,7 @@ var INIT_ELEMENTS = [
     "w": 162,
     "h": 20,
     "z": 23,
-    "html": "<span style=\"font-size:12px;color:#444;\">2024.10~2026.1</span>"
+    "html": "<span style=\"font-size:12px;color:#444;\"><span style=\"font-size: 14px;\">2024.10   2026.1</span></span>"
   },
   {
     "id": "e_r1desc",
@@ -202,7 +192,7 @@ var INIT_ELEMENTS = [
     "w": 162,
     "h": 20,
     "z": 30,
-    "html": "<span style=\"font-size:12px;color:#444;\">2026.1~ 至今</span>"
+    "html": "<span style=\"font-size:12px;color:#444;\"><span style=\"font-size: 14px;\">2026.1    至今</span></span>"
   },
   {
     "id": "e_r2desc",
@@ -272,7 +262,7 @@ var INIT_ELEMENTS = [
     "w": 162,
     "h": 20,
     "z": 37,
-    "html": "<span style=\"font-size:12px;color:#444;\">2025.02~2025.11</span>"
+    "html": "<span style=\"font-size:12px;color:#444;\"><span style=\"font-size: 14px;\">2025.02   2025.11</span></span>"
   },
   {
     "id": "e_p1desc",
@@ -342,7 +332,7 @@ var INIT_ELEMENTS = [
     "w": 162,
     "h": 20,
     "z": 44,
-    "html": "<span style=\"font-size:12px;color:#444;\">2023.11~2025.1</span>"
+    "html": "<span style=\"font-size:12px;color:#444;\"><span style=\"font-size: 14px;\">2023.11   2025.1</span></span>"
   },
   {
     "id": "e_p2b1",
@@ -453,5 +443,45 @@ var INIT_ELEMENTS = [
     "h": 18,
     "z": 56,
     "html": "<span style=\"font-size:12.5px;\">◇ 作为第一负责人，负责校级实践队活动《原典精读·实践转换》，带领团队荣获星级实践队称号</span>"
+  },
+  {
+    "id": "el_17743296648082np1vlid419",
+    "type": "text",
+    "x": 655,
+    "y": 215,
+    "w": 300,
+    "h": 30,
+    "z": 59,
+    "html": "<span style=\"font-size:14px;color:#111;\">~</span>"
+  },
+  {
+    "id": "el_1774329739140wdbsuan189a",
+    "type": "text",
+    "x": 654,
+    "y": 437,
+    "w": 300,
+    "h": 30,
+    "z": 60,
+    "html": "<span style=\"font-size:14px;color:#111;\">~</span>"
+  },
+  {
+    "id": "el_1774329747554y6uncfr07tl",
+    "type": "text",
+    "x": 654,
+    "y": 609,
+    "w": 300,
+    "h": 30,
+    "z": 61,
+    "html": "<span style=\"font-size:14px;color:#111;\">~</span>"
+  },
+  {
+    "id": "el_17743297524109vseetek9kw",
+    "type": "text",
+    "x": 656,
+    "y": 806,
+    "w": 300,
+    "h": 30,
+    "z": 62,
+    "html": "<span style=\"font-size:14px;color:#111;\">~</span>"
   }
 ];
