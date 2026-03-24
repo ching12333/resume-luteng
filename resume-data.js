@@ -429,8 +429,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_work_t",
     "type": "text",
-    "x": 28,
-    "y": 844,
+    "x": 25,
+    "y": 902,
     "w": 300,
     "h": 24,
     "z": 53,
@@ -439,8 +439,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_line4",
     "type": "line",
-    "x": 28,
-    "y": 840,
+    "x": 25,
+    "y": 898,
     "w": 730,
     "h": 2,
     "z": 54,
@@ -449,8 +449,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_w1",
     "type": "text",
-    "x": 28,
-    "y": 870,
+    "x": 25,
+    "y": 928,
     "w": 730,
     "h": 18,
     "z": 55,
@@ -459,8 +459,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_w2",
     "type": "text",
-    "x": 28,
-    "y": 890,
+    "x": 25,
+    "y": 948,
     "w": 730,
     "h": 18,
     "z": 56,
