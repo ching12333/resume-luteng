@@ -40,7 +40,7 @@ var INIT_ELEMENTS = [
     "id": "e_photo",
     "type": "image",
     "x": 672,
-    "y": 54,
+    "y": 18,
     "w": 94,
     "h": 118,
     "z": 14,
@@ -49,8 +49,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_qr",
     "type": "image",
-    "x": 591,
-    "y": 100,
+    "x": 686,
+    "y": 142,
     "w": 76,
     "h": 76,
     "z": 15,
@@ -429,8 +429,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_work_t",
     "type": "text",
-    "x": 25,
-    "y": 920,
+    "x": 28,
+    "y": 844,
     "w": 300,
     "h": 24,
     "z": 53,
@@ -439,8 +439,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_line4",
     "type": "line",
-    "x": 25,
-    "y": 916,
+    "x": 28,
+    "y": 840,
     "w": 730,
     "h": 2,
     "z": 54,
@@ -449,8 +449,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_w1",
     "type": "text",
-    "x": 25,
-    "y": 946,
+    "x": 28,
+    "y": 870,
     "w": 730,
     "h": 18,
     "z": 55,
@@ -459,23 +459,11 @@ var INIT_ELEMENTS = [
   {
     "id": "e_w2",
     "type": "text",
-    "x": 25,
-    "y": 966,
+    "x": 28,
+    "y": 890,
     "w": 730,
     "h": 18,
     "z": 56,
     "html": "<span style=\"font-size:12.5px;\">◇ 作为第一负责人，负责校级实践队活动《原典精读·实践转换》，带领团队荣获星级实践队称号</span>"
-  },
-  {
-    "id": "el_17743271781682lxbad7sv5n",
-    "type": "star",
-    "x": 24,
-    "y": 281,
-    "w": 20,
-    "h": 20,
-    "z": 58,
-    "char": "★",
-    "color": "rgb(102, 9, 116)",
-    "fontSize": 16
   }
 ];
