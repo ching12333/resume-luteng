@@ -39,8 +39,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_photo",
     "type": "image",
-    "x": 672,
-    "y": 18,
+    "x": 676,
+    "y": 53,
     "w": 94,
     "h": 118,
     "z": 14,
@@ -49,8 +49,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_qr",
     "type": "image",
-    "x": 686,
-    "y": 142,
+    "x": 591,
+    "y": 99,
     "w": 76,
     "h": 76,
     "z": 15,
