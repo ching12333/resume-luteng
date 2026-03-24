@@ -7,8 +7,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_name",
     "type": "text",
-    "x": 28,
-    "y": 22,
+    "x": 29,
+    "y": 4,
     "w": 320,
     "h": 46,
     "z": 11,
@@ -17,8 +17,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_sub",
     "type": "text",
-    "x": 130,
-    "y": 30,
+    "x": 133,
+    "y": 14,
     "w": 330,
     "h": 36,
     "z": 12,
@@ -47,8 +47,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_qr",
     "type": "image",
-    "x": 591,
-    "y": 99,
+    "x": 587,
+    "y": 102,
     "w": 76,
     "h": 76,
     "z": 15,
@@ -57,12 +57,12 @@ var INIT_ELEMENTS = [
   {
     "id": "e_edu_t",
     "type": "text",
-    "x": 28,
+    "x": 46,
     "y": 82,
     "w": 300,
     "h": 24,
-    "z": 16,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 教育背景</span>"
+    "z": 77,
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">教育背景</span>"
   },
   {
     "id": "e_school",
@@ -72,7 +72,7 @@ var INIT_ELEMENTS = [
     "w": 640,
     "h": 20,
     "z": 17,
-    "html": "◇ <strong>中国石油大学（华东）</strong>（双一流，原 211）&nbsp;&nbsp;&nbsp;&nbsp;<strong>专业：</strong>应用物理学"
+    "html": "◇ <strong><span style=\"font-size: 16px;\"><span style=\"font-size: 16px;\">中国石油大学（华东）</span></span></strong><span style=\"font-size: 10px;\">（双一流，原 211）</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>专业：</strong>应用物理学"
   },
   {
     "id": "e_gpa",
@@ -87,7 +87,7 @@ var INIT_ELEMENTS = [
   {
     "id": "e_contact",
     "type": "text",
-    "x": 28,
+    "x": 27,
     "y": 152,
     "w": 640,
     "h": 20,
@@ -101,8 +101,8 @@ var INIT_ELEMENTS = [
     "y": 178,
     "w": 300,
     "h": 24,
-    "z": 20,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 科研经历</span>"
+    "z": 79,
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">   科研经历</span>"
   },
   {
     "id": "e_r1t",
@@ -222,7 +222,7 @@ var INIT_ELEMENTS = [
     "w": 730,
     "h": 18,
     "z": 33,
-    "html": "<span style=\"font-size:12.5px;\">◇ 与博士师兄共同完成 SEM 扫描电镜测量，测量在 6nm 孔隙核磁共振实验结果，编写核磁 Python 代码等</span>"
+    "html": "<span style=\"font-size:12.5px;\">◇ 与博士师兄共同完成 SEM 扫描电镜测量，测量 6nm 孔隙核磁共振实验结果，编写核磁 Python 代码等</span>"
   },
   {
     "id": "e_proj_t",
@@ -231,17 +231,17 @@ var INIT_ELEMENTS = [
     "y": 580,
     "w": 300,
     "h": 24,
-    "z": 34,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 项目经历</span>"
+    "z": 82,
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">   项目经历</span>"
   },
   {
     "id": "e_line2",
     "type": "line",
-    "x": 24,
-    "y": 576,
+    "x": 23,
+    "y": 564,
     "w": 730,
     "h": 2,
-    "z": 35,
+    "z": 83,
     "color": "#2c3e50"
   },
   {
@@ -302,7 +302,7 @@ var INIT_ELEMENTS = [
     "w": 730,
     "h": 18,
     "z": 41,
-    "html": "<span style=\"font-size:12.5px;\">◇ 独立利用 comsol 完成两套实验有限元<strong>仿真模拟</strong>，在张亚萍教授团队指导下完成约 60% 相关实验报告撰写</span>"
+    "html": "<span style=\"font-size:12.5px;\">◇ 独立利用 <b>comsol</b> 完成两套实验有限元<strong>仿真模拟</strong>，在张亚萍教授团队指导下完成约 60% 相关实验报告撰写</span>"
   },
   {
     "id": "e_p1b4",
@@ -351,8 +351,8 @@ var INIT_ELEMENTS = [
     "y": 868,
     "w": 300,
     "h": 24,
-    "z": 47,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 个人素养</span>"
+    "z": 85,
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">  个人素养</span>"
   },
   {
     "id": "e_line3",
@@ -361,7 +361,7 @@ var INIT_ELEMENTS = [
     "y": 864,
     "w": 730,
     "h": 2,
-    "z": 48,
+    "z": 86,
     "color": "#2c3e50"
   },
   {
@@ -411,8 +411,8 @@ var INIT_ELEMENTS = [
     "y": 1003,
     "w": 300,
     "h": 24,
-    "z": 53,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">■ 工作经历</span>"
+    "z": 88,
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">  工作经历</span>"
   },
   {
     "id": "e_line4",
@@ -421,7 +421,7 @@ var INIT_ELEMENTS = [
     "y": 999,
     "w": 730,
     "h": 2,
-    "z": 54,
+    "z": 89,
     "color": "#2c3e50"
   },
   {
@@ -467,8 +467,8 @@ var INIT_ELEMENTS = [
   {
     "id": "el_1774329747554y6uncfr07tl",
     "type": "text",
-    "x": 654,
-    "y": 609,
+    "x": 650,
+    "y": 612,
     "w": 300,
     "h": 30,
     "z": 61,
@@ -477,11 +477,61 @@ var INIT_ELEMENTS = [
   {
     "id": "el_17743297524109vseetek9kw",
     "type": "text",
-    "x": 656,
-    "y": 806,
+    "x": 655,
+    "y": 808,
     "w": 300,
     "h": 30,
     "z": 62,
     "html": "<span style=\"font-size:14px;color:#111;\">~</span>"
+  },
+  {
+    "id": "el_1774330617405zz491dypcss",
+    "type": "image",
+    "x": 25,
+    "y": 47,
+    "w": 770,
+    "h": 44,
+    "z": 62,
+    "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB0wAAABpAgMAAADEozi+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAGYJdOvl7+vl77lYFSoAAAADdFJOUwD//jNX5rcAAAAJcEhZcwAAMsAAADLAAShkWtsAAADXSURBVHja7dGBDUBQEECxGxJDWpLkC0M87QqdAQAAAAAAAGDZH8dJxXd6UeG0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2nPe7oNGU57nAIAAADAL93Kf/1grAQrvgAAAABJRU5ErkJggg=="
+  },
+  {
+    "id": "el_1774330720396h5suv5oh6y",
+    "type": "image",
+    "x": 23,
+    "y": 167,
+    "w": 770,
+    "h": 44,
+    "z": 32,
+    "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB0wAAABpAgMAAADEozi+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAGYJdOvl7+vl77lYFSoAAAADdFJOUwD//jNX5rcAAAAJcEhZcwAAMsAAADLAAShkWtsAAADXSURBVHja7dGBDUBQEECxGxJDWpLkC0M87QqdAQAAAAAAAGDZH8dJxXd6UeG0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2nPe7oNGU57nAIAAADAL93Kf/1grAQrvgAAAABJRU5ErkJggg=="
+  },
+  {
+    "id": "el_1774330766203euaasl7u0q",
+    "type": "image",
+    "x": 24,
+    "y": 567,
+    "w": 770,
+    "h": 44,
+    "z": 80,
+    "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB0wAAABpAgMAAADEozi+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAGYJdOvl7+vl77lYFSoAAAADdFJOUwD//jNX5rcAAAAJcEhZcwAAMsAAADLAAShkWtsAAADXSURBVHja7dGBDUBQEECxGxJDWpLkC0M87QqdAQAAAAAAAGDZH8dJxXd6UeG0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2nPe7oNGU57nAIAAADAL93Kf/1grAQrvgAAAABJRU5ErkJggg=="
+  },
+  {
+    "id": "el_1774330830653bekx31z58xu",
+    "type": "image",
+    "x": 25,
+    "y": 859,
+    "w": 770,
+    "h": 44,
+    "z": 84,
+    "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB0wAAABpAgMAAADEozi+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAGYJdOvl7+vl77lYFSoAAAADdFJOUwD//jNX5rcAAAAJcEhZcwAAMsAAADLAAShkWtsAAADXSURBVHja7dGBDUBQEECxGxJDWpLkC0M87QqdAQAAAAAAAGDZH8dJxXd6UeG0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2nPe7oNGU57nAIAAADAL93Kf/1grAQrvgAAAABJRU5ErkJggg=="
+  },
+  {
+    "id": "el_17743308595605ppr915a9e",
+    "type": "image",
+    "x": 25,
+    "y": 994,
+    "w": 770,
+    "h": 44,
+    "z": 87,
+    "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB0wAAABpAgMAAADEozi+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAGYJdOvl7+vl77lYFSoAAAADdFJOUwD//jNX5rcAAAAJcEhZcwAAMsAAADLAAShkWtsAAADXSURBVHja7dGBDUBQEECxGxJDWpLkC0M87QqdAQAAAAAAAGDZH8dJxXd6UeG0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2mP0x6nPU57nPY47XHa47THaY/THqc9Tnuc9jjtcdrjtMdpj9Mepz1Oe5z2OO1x2uO0x2nPe7oNGU57nAIAAADAL93Kf/1grAQrvgAAAABJRU5ErkJggg=="
   }
 ];
