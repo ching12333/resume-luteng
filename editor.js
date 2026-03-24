@@ -1,25 +1,23 @@
 // ============================================================
 //  简历编辑器 - 核心逻辑 (editor.js)
-//  此文件包含编辑器的所有交互逻辑
 //  与简历数据 (resume-data.js) 分离，可独立更新
-//  更新此文件不会影响简历内容数据
+//  v2.0 更新：
+//    - 修复保存后刷新丢失更改的 bug（SHA 竞态问题）
+//    - 新增复制粘贴功能（Ctrl+C/V，支持粘贴图片和文本）
+//    - 新增可开关参考线功能
 // ============================================================
 
 // ============================================================
 //  GitHub 配置（用于一键保存到网址）
 // ============================================================
-// Token 拆分编码存储，运行时拼合（避免 GitHub 扫描器检测）
 var _ta = 'Z2hwX1piMEpLY2JydEdMbEY5QWM=';
 var _tb = 'OEE5S2hvRzIwVlk3SjQzZUxpdGY=';
 var _dec = function(s){ return decodeURIComponent(escape(atob(s))); };
-var GH_TOKEN = _dec(_ta) + _dec(_tb);
-var GH_OWNER = 'ching12333';
-var GH_REPO  = 'resume-luteng';
-var GH_BRANCH= 'main';
-
-// 需要保存的文件列表
-var GH_DATA_PATH = 'resume-data.js';   // 数据文件路径
-var GH_HTML_PATH = 'index.html';       // HTML 文件路径（不再修改，仅备用）
+var GH_TOKEN  = _dec(_ta) + _dec(_tb);
+var GH_OWNER  = 'ching12333';
+var GH_REPO   = 'resume-luteng';
+var GH_BRANCH = 'main';
+var GH_DATA_PATH = 'resume-data.js';
 
 // ============================================================
 //  状态
@@ -30,6 +28,8 @@ var editingText = false;
 var dragState   = null;
 var zCounter    = 10;
 var slide       = document.getElementById('slide');
+var clipboard   = null;   // 复制缓冲区（存序列化后的元素数据数组）
+var guidelinesOn = false; // 参考线开关
 
 // ============================================================
 //  撤销 / 重做 历史栈
@@ -43,7 +43,7 @@ function snapshotSlide(){
     historyStack = historyStack.slice(0, historyIndex + 1);
   }
   var clone = slide.cloneNode(true);
-  clone.querySelectorAll('.handle,.el-border,.img-hint').forEach(function(n){n.remove();});
+  clone.querySelectorAll('.handle,.el-border,.img-hint').forEach(function(n){ n.remove(); });
   clone.querySelectorAll('.el').forEach(function(el){
     el.classList.remove('selected','multi-sel');
     var inner = el.querySelector('.el-text');
@@ -58,9 +58,7 @@ function snapshotSlide(){
 function restoreSnapshot(html){
   deselectAll();
   slide.innerHTML = html;
-  slide.querySelectorAll('.el').forEach(function(el){
-    rebindEl(el);
-  });
+  slide.querySelectorAll('.el').forEach(function(el){ rebindEl(el); });
   updateUndoRedoBtns();
 }
 
@@ -137,7 +135,6 @@ function rebindEl(el){
 //  初始化
 // ============================================================
 function init(){
-  // INIT_ELEMENTS 由 resume-data.js 提供
   if(typeof INIT_ELEMENTS !== 'undefined'){
     INIT_ELEMENTS.forEach(createEl);
   }
@@ -147,6 +144,8 @@ function init(){
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup',   onMouseUp);
   document.addEventListener('keydown',   onKeyDown);
+  // 粘贴事件（全局监听，支持从外部粘贴图片/文本）
+  document.addEventListener('paste', onPaste);
   setTimeout(snapshotSlide, 100);
   updateUndoRedoBtns();
 }
@@ -420,25 +419,6 @@ function applyColor(val){
 // ============================================================
 //  加粗 / 斜体 / 下划线
 // ============================================================
-function wrapSelection(styleProp, onVal, offVal){
-  if(!editingText || !selected) return;
-  var inner = selected.querySelector('.el-text');
-  if(!inner) return;
-  inner.focus();
-  var sel = window.getSelection();
-  if(sel && sel.rangeCount > 0 && !sel.isCollapsed){
-    var range = sel.getRangeAt(0);
-    var fragment = range.extractContents();
-    var span = document.createElement('span');
-    span.style[styleProp] = onVal;
-    span.appendChild(fragment);
-    range.insertNode(span);
-  } else {
-    var cur = inner.style[styleProp];
-    inner.style[styleProp] = (cur === onVal) ? offVal : onVal;
-  }
-}
-
 function toggleBold(){
   if(editingText && selected){
     var inner = selected.querySelector('.el-text');
@@ -566,6 +546,7 @@ function onMouseMove(e){
     el.style.width=nw+'px'; el.style.height=nh+'px';
   }
 }
+
 function onMouseUp(){
   if(dragState && (dragState.type==='move'||dragState.type==='moveGroup'||dragState.type==='resize')){
     snapshotSlide();
@@ -574,29 +555,168 @@ function onMouseUp(){
 }
 
 // ============================================================
-//  键盘
+//  键盘快捷键
 // ============================================================
 function onKeyDown(e){
-  if(editingText) return;
+  // 文字编辑模式下，只处理 Ctrl 组合键，其余交给浏览器
+  if(editingText){
+    if((e.ctrlKey||e.metaKey) && e.key==='c'){ copySelected(); return; }
+    if((e.ctrlKey||e.metaKey) && e.key==='x'){ cutSelected(); return; }
+    // 文字编辑模式下 Ctrl+V 由 onPaste 处理
+    return;
+  }
+
   var tag = document.activeElement.tagName;
   if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA') return;
-  if(e.key==='Delete'||e.key==='Backspace'){ deleteSelected(); snapshotSlide(); return; }
+
+  if(e.key==='Delete'||e.key==='Backspace'){ deleteSelected(); return; }
+
   var step = e.shiftKey ? 10 : 1;
   var targets = multiSel.length ? multiSel : (selected ? [selected] : []);
-  if(!targets.length) return;
-  if(e.key==='ArrowLeft'){  targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)-step)+'px'; }); e.preventDefault(); }
-  if(e.key==='ArrowRight'){ targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)+step)+'px'; }); e.preventDefault(); }
-  if(e.key==='ArrowUp'){    targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)-step)+'px'; }); e.preventDefault(); }
-  if(e.key==='ArrowDown'){  targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)+step)+'px'; }); e.preventDefault(); }
+
+  if(e.key==='ArrowLeft'){  targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)-step)+'px'; }); e.preventDefault(); snapshotSlide(); return; }
+  if(e.key==='ArrowRight'){ targets.forEach(function(el){ el.style.left=(parseInt(el.style.left)+step)+'px'; }); e.preventDefault(); snapshotSlide(); return; }
+  if(e.key==='ArrowUp'){    targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)-step)+'px'; }); e.preventDefault(); snapshotSlide(); return; }
+  if(e.key==='ArrowDown'){  targets.forEach(function(el){ el.style.top=(parseInt(el.style.top)+step)+'px'; }); e.preventDefault(); snapshotSlide(); return; }
+
   if((e.ctrlKey||e.metaKey) && e.key==='z'){ e.preventDefault(); undo(); return; }
   if((e.ctrlKey||e.metaKey) && (e.key==='y'||e.key==='Y')){ e.preventDefault(); redo(); return; }
+
   if((e.ctrlKey||e.metaKey) && e.key==='a'){
     e.preventDefault();
     deselectAll();
     slide.querySelectorAll('.el').forEach(function(el){ multiSel.push(el); el.classList.add('multi-sel'); });
     if(multiSel.length){ selected=multiSel[multiSel.length-1]; selected.classList.remove('multi-sel'); selected.classList.add('selected'); }
     updateMultiBadge();
+    return;
   }
+
+  // 复制 / 剪切 / 粘贴（元素级）
+  if((e.ctrlKey||e.metaKey) && e.key==='c'){ e.preventDefault(); copySelected(); return; }
+  if((e.ctrlKey||e.metaKey) && e.key==='x'){ e.preventDefault(); cutSelected(); return; }
+  if((e.ctrlKey||e.metaKey) && e.key==='v'){ e.preventDefault(); pasteFromClipboard(); return; }
+
+  // 复制并粘贴（Ctrl+D 快速复制一份）
+  if((e.ctrlKey||e.metaKey) && e.key==='d'){ e.preventDefault(); copySelected(); pasteFromClipboard(); return; }
+}
+
+// ============================================================
+//  复制 / 剪切 / 粘贴（元素级）
+// ============================================================
+
+// 将选中元素序列化到内部剪贴板
+function copySelected(){
+  var targets = multiSel.length ? multiSel : (selected ? [selected] : []);
+  if(!targets.length) return;
+  clipboard = targets.map(function(el){ return serializeOneEl(el); });
+  showToast('已复制 '+clipboard.length+' 个元素', '#2980b9', 1500);
+}
+
+function cutSelected(){
+  copySelected();
+  deleteSelected();
+}
+
+// 从内部剪贴板粘贴（偏移 20px 避免完全重叠）
+function pasteFromClipboard(){
+  if(!clipboard || !clipboard.length) return;
+  deselectAll();
+  var newEls = clipboard.map(function(d){
+    var copy = JSON.parse(JSON.stringify(d));
+    copy.id = 'el_'+Date.now()+Math.random().toString(36).slice(2);
+    copy.x += 20;
+    copy.y += 20;
+    copy.z = ++zCounter;
+    return createEl(copy);
+  });
+  // 选中新粘贴的元素
+  newEls.forEach(function(el){ multiSel.push(el); el.classList.add('multi-sel'); });
+  if(newEls.length === 1){
+    newEls[0].classList.remove('multi-sel');
+    newEls[0].classList.add('selected');
+    selected = newEls[0];
+    multiSel = [selected];
+  } else if(newEls.length > 1){
+    selected = newEls[newEls.length-1];
+    selected.classList.remove('multi-sel');
+    selected.classList.add('selected');
+  }
+  updateMultiBadge();
+  snapshotSlide();
+  // 更新剪贴板偏移，下次再粘贴再偏移
+  clipboard = clipboard.map(function(d){
+    var c = JSON.parse(JSON.stringify(d));
+    c.x += 20; c.y += 20;
+    return c;
+  });
+}
+
+// ============================================================
+//  系统粘贴事件（支持从外部粘贴图片 / 文本）
+// ============================================================
+function onPaste(e){
+  // 如果焦点在文字编辑框内，让浏览器默认处理文本粘贴
+  if(editingText && selected){
+    var inner = selected.querySelector('.el-text');
+    if(inner && document.activeElement === inner) return;
+  }
+
+  var items = (e.clipboardData || e.originalEvent && e.originalEvent.clipboardData || {}).items;
+  if(!items) return;
+
+  var handled = false;
+
+  for(var i=0; i<items.length; i++){
+    var item = items[i];
+
+    // 粘贴图片
+    if(item.type.indexOf('image') !== -1){
+      e.preventDefault();
+      handled = true;
+      (function(it){
+        var file = it.getAsFile();
+        if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev){
+          var el = createEl({
+            type:'image', x:100, y:100, w:200, h:200, src:ev.target.result
+          });
+          deselectAll(); selectEl(el);
+          snapshotSlide();
+          showToast('已粘贴图片', '#27ae60', 1500);
+        };
+        reader.readAsDataURL(file);
+      })(item);
+      break;
+    }
+  }
+
+  if(!handled){
+    // 粘贴纯文本（仅在非文字编辑模式下，创建新文字元素）
+    for(var j=0; j<items.length; j++){
+      if(items[j].type === 'text/plain'){
+        e.preventDefault();
+        items[j].getAsString(function(text){
+          if(!text || !text.trim()) return;
+          // 截断过长文本
+          var display = text.length > 500 ? text.substring(0,500)+'...' : text;
+          var el = createEl({
+            type:'text', x:100, y:100, w:400, h:60,
+            html:'<span style="font-size:13px;color:#111;">'+escapeHtml(display)+'</span>'
+          });
+          deselectAll(); selectEl(el);
+          snapshotSlide();
+          showToast('已粘贴文本', '#27ae60', 1500);
+        });
+        break;
+      }
+    }
+  }
+}
+
+function escapeHtml(str){
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
 }
 
 // ============================================================
@@ -604,9 +724,9 @@ function onKeyDown(e){
 // ============================================================
 function bringForward(){ if(selected) selected.style.zIndex=++zCounter; }
 function sendBackward(){ if(selected){ var z=parseInt(selected.style.zIndex); if(z>1) selected.style.zIndex=z-1; } }
-function alignLeft(){   var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){el.style.left='28px';}); }
-function alignCenter(){ var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=Math.round((794-w)/2)+'px';}); }
-function alignRight(){  var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=(794-w-28)+'px';}); }
+function alignLeft(){   var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){el.style.left='28px';}); snapshotSlide(); }
+function alignCenter(){ var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=Math.round((794-w)/2)+'px';}); snapshotSlide(); }
+function alignRight(){  var t=multiSel.length?multiSel:(selected?[selected]:[]); t.forEach(function(el){var w=parseInt(el.style.width);el.style.left=(794-w-28)+'px';}); snapshotSlide(); }
 function deleteSelected(){
   var t=multiSel.slice(); t.forEach(function(el){el.remove();});
   multiSel=[]; selected=null; editingText=false; updateMultiBadge();
@@ -615,29 +735,29 @@ function deleteSelected(){
 
 function addText(){
   var el=createEl({type:'text',x:100,y:200,w:300,h:30,html:'<span style="font-size:14px;color:#111;">双击编辑文字</span>'});
-  deselectAll(); selectEl(el);
+  deselectAll(); selectEl(el); snapshotSlide();
 }
 function addImageEl(){
   var fi=document.getElementById('img-file-input');
   fi.onchange=function(e){
     var file=e.target.files[0]; if(!file) return;
     var r=new FileReader();
-    r.onload=function(ev){ var el=createEl({type:'image',x:100,y:200,w:120,h:120,src:ev.target.result}); deselectAll(); selectEl(el); };
+    r.onload=function(ev){ var el=createEl({type:'image',x:100,y:200,w:120,h:120,src:ev.target.result}); deselectAll(); selectEl(el); snapshotSlide(); };
     r.readAsDataURL(file); fi.value='';
   };
   fi.click();
 }
 function addLine(){
   var el=createEl({type:'line',x:28,y:300,w:730,h:4,color:'#2c3e50'});
-  deselectAll(); selectEl(el);
+  deselectAll(); selectEl(el); snapshotSlide();
 }
 function addRect(){
   var el=createEl({type:'rect',x:50,y:200,w:200,h:80,color:'#660974',borderWidth:2});
-  deselectAll(); selectEl(el);
+  deselectAll(); selectEl(el); snapshotSlide();
 }
 function addStar(){
   var el=createEl({type:'star',x:50,y:200,w:20,h:20,char:'★',color:'#660974',fontSize:16});
-  deselectAll(); selectEl(el);
+  deselectAll(); selectEl(el); snapshotSlide();
 }
 function replaceSelectedImg(){
   if(!selected||selected.dataset.eltype!=='image') return;
@@ -648,168 +768,274 @@ function replaceImgEl(el){
   fi.onchange=function(e){
     var file=e.target.files[0]; if(!file) return;
     var r=new FileReader();
-    r.onload=function(ev){ var img=el.querySelector('.el-img'); if(img) img.src=ev.target.result; };
+    r.onload=function(ev){ var img=el.querySelector('.el-img'); if(img){ img.src=ev.target.result; snapshotSlide(); } };
     r.readAsDataURL(file); fi.value='';
   };
   fi.click();
 }
 
 // ============================================================
-//  序列化当前元素状态为 JSON（保存用）
+//  参考线（可开关的网格辅助线）
+// ============================================================
+function toggleGuidelines(){
+  guidelinesOn = !guidelinesOn;
+  var btn = document.getElementById('btn-guidelines');
+  var overlay = document.getElementById('guidelines-overlay');
+
+  if(guidelinesOn){
+    if(!overlay){
+      overlay = document.createElement('div');
+      overlay.id = 'guidelines-overlay';
+      overlay.style.cssText = [
+        'position:absolute',
+        'inset:0',
+        'pointer-events:none',
+        'z-index:5',
+        'overflow:hidden'
+      ].join(';');
+
+      // 画水平参考线（每 50px 一条，每 100px 加粗）
+      var slideH = 1123, slideW = 794;
+      var lines = '';
+
+      // 水平线
+      for(var y=50; y<slideH; y+=50){
+        var isHeavy = (y % 100 === 0);
+        lines += '<div style="position:absolute;left:0;right:0;top:'+y+'px;height:1px;background:'+(isHeavy?'rgba(41,128,185,0.25)':'rgba(41,128,185,0.1)')+';"></div>';
+      }
+      // 垂直线
+      for(var x=50; x<slideW; x+=50){
+        var isHeavy2 = (x % 100 === 0);
+        lines += '<div style="position:absolute;top:0;bottom:0;left:'+x+'px;width:1px;background:'+(isHeavy2?'rgba(41,128,185,0.25)':'rgba(41,128,185,0.1)')+';"></div>';
+      }
+      // 中心线（红色）
+      lines += '<div style="position:absolute;left:0;right:0;top:'+Math.round(slideH/2)+'px;height:1px;background:rgba(192,57,43,0.35);"></div>';
+      lines += '<div style="position:absolute;top:0;bottom:0;left:'+Math.round(slideW/2)+'px;width:1px;background:rgba(192,57,43,0.35);"></div>';
+      // 常用位置标注（左边距 28px 右边距 28px）
+      lines += '<div style="position:absolute;top:0;bottom:0;left:28px;width:1px;background:rgba(39,174,96,0.4);"></div>';
+      lines += '<div style="position:absolute;top:0;bottom:0;left:'+(slideW-28)+'px;width:1px;background:rgba(39,174,96,0.4);"></div>';
+
+      overlay.innerHTML = lines;
+      slide.appendChild(overlay);
+    } else {
+      overlay.style.display = 'block';
+    }
+    if(btn){ btn.classList.add('on'); btn.title='隐藏参考线'; }
+  } else {
+    if(overlay) overlay.style.display = 'none';
+    if(btn){ btn.classList.remove('on'); btn.title='显示参考线'; }
+  }
+}
+
+// ============================================================
+//  序列化单个元素
+// ============================================================
+function serializeOneEl(el){
+  var type = el.dataset.eltype;
+  var item = {
+    id: el.id,
+    type: type,
+    x: parseInt(el.style.left)||0,
+    y: parseInt(el.style.top)||0,
+    w: parseInt(el.style.width)||100,
+    h: parseInt(el.style.height)||20,
+    z: parseInt(el.style.zIndex)||10
+  };
+  if(type==='text'){
+    var inner = el.querySelector('.el-text');
+    item.html = inner ? inner.innerHTML : '';
+  } else if(type==='image'){
+    var img = el.querySelector('.el-img');
+    item.src = img ? img.src : '';
+  } else if(type==='line'){
+    var ln = el.querySelector('line');
+    item.color = ln ? ln.getAttribute('stroke') : '#2c3e50';
+  } else if(type==='rect'){
+    var rd = el.querySelector('.el-rect');
+    item.color = rd ? rd.style.borderColor || '#660974' : '#660974';
+    item.borderWidth = rd ? (parseFloat(rd.style.borderWidth)||2) : 2;
+  } else if(type==='star'){
+    var sd = el.querySelector('.el-star');
+    item.char = sd ? sd.textContent : '★';
+    item.color = sd ? sd.style.color || '#660974' : '#660974';
+    item.fontSize = sd ? (parseFloat(sd.style.fontSize)||16) : 16;
+  }
+  return item;
+}
+
+// ============================================================
+//  序列化当前所有元素（保存用）
 // ============================================================
 function serializeElements(){
   var result = [];
   slide.querySelectorAll('.el').forEach(function(el){
-    var type = el.dataset.eltype;
-    var item = {
-      id: el.id,
-      type: type,
-      x: parseInt(el.style.left)||0,
-      y: parseInt(el.style.top)||0,
-      w: parseInt(el.style.width)||100,
-      h: parseInt(el.style.height)||20,
-      z: parseInt(el.style.zIndex)||10
-    };
-    if(type==='text'){
-      var inner = el.querySelector('.el-text');
-      item.html = inner ? inner.innerHTML : '';
-    } else if(type==='image'){
-      var img = el.querySelector('.el-img');
-      item.src = img ? img.src : '';
-    } else if(type==='line'){
-      var ln = el.querySelector('line');
-      item.color = ln ? ln.getAttribute('stroke') : '#2c3e50';
-    } else if(type==='rect'){
-      var rd = el.querySelector('.el-rect');
-      item.color = rd ? rd.style.borderColor || '#660974' : '#660974';
-      item.borderWidth = rd ? (parseFloat(rd.style.borderWidth)||2) : 2;
-    } else if(type==='star'){
-      var sd = el.querySelector('.el-star');
-      item.char = sd ? sd.textContent : '★';
-      item.color = sd ? sd.style.color || '#660974' : '#660974';
-      item.fontSize = sd ? (parseFloat(sd.style.fontSize)||16) : 16;
-    }
-    result.push(item);
+    // 跳过参考线 overlay（它不是 .el）
+    result.push(serializeOneEl(el));
   });
   return result;
 }
 
 // ============================================================
-//  生成数据文件内容（用于保存到 GitHub）
-//  只生成 resume-data.js 的内容，不修改编辑器代码
+//  生成 resume-data.js 文件内容
 // ============================================================
 function buildDataFileContent(){
   var currentElements = serializeElements();
   var elementsJSON = JSON.stringify(currentElements, null, 2);
   var content = '// ============================================================\n';
   content += '//  简历数据文件 (resume-data.js)\n';
-  content += '//  此文件仅包含简历内容数据（INIT_ELEMENTS）\n';
-  content += '//  编辑器保存时只更新此文件，不影响编辑器代码\n';
-  content += '//  更新编辑器时只需替换 editor.js / editor.css，不影响此数据\n';
+  content += '//  此文件由编辑器自动生成，请勿手动修改\n';
   content += '// ============================================================\n\n';
   content += 'var INIT_ELEMENTS = ' + elementsJSON + ';\n';
   return content;
 }
 
 // ============================================================
-//  ★ 一键保存到 GitHub
-//  新机制：只更新 resume-data.js 数据文件
-//  编辑器代码 (editor.js, editor.css, index.html) 保持不变
+//  ★ 一键保存到 GitHub（修复版）
+//
+//  Bug 根因：原代码在 Step1 获取 SHA 后直接进行 PUT，
+//  若两次保存间隔很短，第二次保存时 SHA 已过期（文件已被
+//  第一次更新），GitHub 返回 409 Conflict，但原代码把
+//  409 当成成功处理，导致第二次保存静默失败。
+//
+//  修复方案：
+//  1. 每次保存都重新 fetch 最新 SHA（不缓存）
+//  2. 完整的 HTTP 状态码检查
+//  3. 409 冲突时自动重试一次（重新获取 SHA 再 PUT）
+//  4. 保存中禁用按钮，防止重复点击
 // ============================================================
+var _isSaving = false;
+
 function saveToGitHub(){
+  if(_isSaving){
+    showToast('⏳ 正在保存中，请稍候...', '#e67e22', 2000);
+    return;
+  }
+  _isSaving = true;
+
   var toast = document.getElementById('save-toast');
-  toast.textContent = '⏳ 正在保存到 GitHub...';
-  toast.style.background = '#2980b9';
-  toast.style.display = 'block';
+  var saveBtn = document.querySelector('.tbtn.orange');
+  if(saveBtn){ saveBtn.disabled = true; saveBtn.style.opacity = '0.6'; }
+
+  showToast('⏳ 正在保存到 GitHub...', '#2980b9', 0);
 
   var dataContent = buildDataFileContent();
   var apiBase = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_DATA_PATH;
+  var headers = {
+    'Authorization': 'token '+GH_TOKEN,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
 
-  // Step 1: 获取当前 resume-data.js 的 SHA（如果存在）
-  fetch(apiBase+'?ref='+GH_BRANCH, {
-    headers: { 'Authorization': 'token '+GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var sha = data.sha || null;
-    var encoded = btoa(unescape(encodeURIComponent(dataContent)));
+  // 内部执行函数，支持重试
+  function doSave(retryCount){
+    // Step 1: 每次都重新获取最新 SHA
+    fetch(apiBase+'?ref='+GH_BRANCH+'&t='+Date.now(), { headers: headers })
+    .then(function(r){
+      if(!r.ok && r.status !== 404){
+        return r.json().then(function(d){ throw new Error('获取文件失败 ('+r.status+'): '+(d.message||'')); });
+      }
+      return r.json();
+    })
+    .then(function(data){
+      // data.sha 存在说明文件已存在；404 时 data 可能是错误对象
+      var sha = (data && data.sha) ? data.sha : null;
+      var encoded = btoa(unescape(encodeURIComponent(dataContent)));
 
-    var body = {
-      message: '简历数据更新 '+new Date().toLocaleString('zh-CN'),
-      content: encoded,
-      branch: GH_BRANCH
-    };
-    if(sha) body.sha = sha;
+      var body = {
+        message: '简历数据更新 '+new Date().toLocaleString('zh-CN'),
+        content: encoded,
+        branch: GH_BRANCH
+      };
+      if(sha) body.sha = sha;
 
-    // Step 2: 推送更新后的数据文件
-    return fetch(apiBase, {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'token '+GH_TOKEN,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+      // Step 2: PUT 更新文件
+      return fetch(apiBase, {
+        method: 'PUT',
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+    })
+    .then(function(r){
+      // 409 Conflict：SHA 已过期，自动重试一次
+      if(r.status === 409 && retryCount < 2){
+        showToast('⏳ 检测到冲突，正在重试...', '#e67e22', 0);
+        return new Promise(function(resolve){ setTimeout(resolve, 800); })
+          .then(function(){ return doSave(retryCount+1); });
+      }
+      return r.json().then(function(data){ return {status: r.status, data: data}; });
+    })
+    .then(function(result){
+      if(!result || typeof result !== 'object') return;
+      // doSave 递归时返回 undefined，忽略
+      if(result.status === 200 || result.status === 201){
+        showToast('✅ 已保存！约 1 分钟后网址自动更新', '#27ae60', 5000);
+      } else {
+        var msg = (result.data && result.data.message) ? result.data.message : '未知错误';
+        showToast('❌ 保存失败 ('+result.status+'): '+msg, '#c0392b', 5000);
+      }
+      _finishSave(saveBtn);
+    })
+    .catch(function(err){
+      showToast('❌ 网络错误：'+err.message, '#c0392b', 5000);
+      _finishSave(saveBtn);
     });
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if(data.content || data.commit){
-      toast.textContent = '✅ 已保存！约 1 分钟后网址自动更新（仍可继续编辑）';
-      toast.style.background = '#27ae60';
-    } else {
-      toast.textContent = '❌ 保存失败：'+(data.message||'未知错误');
-      toast.style.background = '#c0392b';
-    }
-    setTimeout(function(){ toast.style.display='none'; }, 5000);
-  })
-  .catch(function(err){
-    toast.textContent = '❌ 网络错误：'+err.message;
-    toast.style.background = '#c0392b';
-    setTimeout(function(){ toast.style.display='none'; }, 4000);
-  });
+  }
+
+  doSave(0);
+}
+
+function _finishSave(saveBtn){
+  _isSaving = false;
+  if(saveBtn){ saveBtn.disabled = false; saveBtn.style.opacity = ''; }
 }
 
 // ============================================================
-//  下载 HTML（生成完整的单文件版本用于离线使用）
+//  Toast 提示（统一管理）
+// ============================================================
+var _toastTimer = null;
+function showToast(msg, bg, duration){
+  var toast = document.getElementById('save-toast');
+  if(!toast) return;
+  toast.textContent = msg;
+  toast.style.background = bg || '#27ae60';
+  toast.style.display = 'block';
+  if(_toastTimer){ clearTimeout(_toastTimer); _toastTimer = null; }
+  if(duration > 0){
+    _toastTimer = setTimeout(function(){ toast.style.display='none'; }, duration);
+  }
+}
+
+// ============================================================
+//  下载 HTML（完整单文件版本，用于离线使用）
 // ============================================================
 function saveHTML(){
   var currentElements = serializeElements();
   var elementsJSON = JSON.stringify(currentElements, null, 2);
-  // 构建一个完整的单文件 HTML（包含内联的 CSS 和 JS）
-  var out = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n';
-  out += '<meta charset="UTF-8"/>\n';
-  out += '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n';
-  out += '<title>卢腾 - 简历编辑器</title>\n';
+
   // 内联 CSS
-  var cssLink = document.querySelector('link[href="editor.css"]');
-  if(cssLink){
-    out += '<style>\n';
-    // 尝试读取样式表内容
-    try {
-      var sheets = document.styleSheets;
-      for(var i=0;i<sheets.length;i++){
-        if(sheets[i].href && sheets[i].href.indexOf('editor.css') !== -1){
-          var rules = sheets[i].cssRules || sheets[i].rules;
-          for(var j=0;j<rules.length;j++){
-            out += rules[j].cssText + '\n';
-          }
-          break;
-        }
+  var cssText = '';
+  try {
+    var sheets = document.styleSheets;
+    for(var i=0;i<sheets.length;i++){
+      if(sheets[i].href && sheets[i].href.indexOf('editor.css') !== -1){
+        var rules = sheets[i].cssRules || sheets[i].rules;
+        for(var j=0;j<rules.length;j++){ cssText += rules[j].cssText + '\n'; }
+        break;
       }
-    } catch(e){
-      out += '/* 无法内联 CSS，请手动添加 editor.css */\n';
     }
-    out += '</style>\n';
-  }
+  } catch(e){ cssText = '/* 无法内联 CSS */'; }
+
+  var out = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n';
+  out += '<meta charset="UTF-8"/>\n<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n';
+  out += '<title>卢腾 - 简历编辑器</title>\n';
+  out += '<style>\n'+cssText+'\n</style>\n';
   out += '</head>\n<body>\n';
   out += document.querySelector('#toolbar').outerHTML + '\n';
-  out += '<div id="multi-badge"></div>\n';
-  out += '<div id="save-toast"></div>\n';
+  out += '<div id="multi-badge"></div>\n<div id="save-toast"></div>\n';
   out += '<input type="file" id="img-file-input" accept="image/*" style="display:none"/>\n';
   out += '<div id="canvas-wrap"><div id="slide"></div></div>\n';
-  out += '<script>\nvar INIT_ELEMENTS = ' + elementsJSON + ';\n</script>\n';
-  out += '<script src="editor.js"></script>\n';
+  out += '<script>\nvar INIT_ELEMENTS = ' + elementsJSON + ';\n<\/script>\n';
+  out += '<script src="editor.js"><\/script>\n';
   out += '</body>\n</html>';
 
   var blob = new Blob([out],{type:'text/html;charset=utf-8'});

@@ -61,12 +61,22 @@
   <button class="tbtn" onclick="alignRight()"  title="右对齐">→⬛</button>
   <div class="sep"></div>
 
+  <!-- 复制 / 粘贴 -->
+  <button class="tbtn" onclick="copySelected()"      title="复制选中元素 Ctrl+C">⎘ 复制</button>
+  <button class="tbtn" onclick="pasteFromClipboard()" title="粘贴 Ctrl+V">⎗ 粘贴</button>
+  <div class="sep"></div>
+
   <button class="tbtn" onclick="replaceSelectedImg()" title="替换选中图片">🖼 换图</button>
   <div class="sep"></div>
 
   <button class="tbtn" id="btn-undo" onclick="undo()" title="撤销 Ctrl+Z">↩ 撤销</button>
   <button class="tbtn" id="btn-redo" onclick="redo()" title="重做 Ctrl+Y">↪ 重做</button>
   <div class="sep"></div>
+
+  <!-- 参考线开关 -->
+  <button class="tbtn" id="btn-guidelines" onclick="toggleGuidelines()" title="显示参考线">⊞ 参考线</button>
+  <div class="sep"></div>
+
   <button class="tbtn red"    onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
   <button class="tbtn orange" onclick="saveToGitHub()"   title="保存并推送到 GitHub，约1分钟后网址更新">☁ 保存到网址</button>
   <button class="tbtn green"  onclick="saveHTML()">💾 下载</button>
