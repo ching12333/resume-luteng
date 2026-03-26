@@ -22,7 +22,7 @@ var INIT_ELEMENTS = [
     "w": 330,
     "h": 36,
     "z": 12,
-    "html": "<span style=\"font-size:15px;color:#555;font-style:italic;font-family:KaiTi,楷体,STKaiti,serif;\">祝老师教师节快乐 😊</span>"
+    "html": "<span style=\"font-size:15px;color:#555;font-style:italic;font-family:KaiTi,楷体,STKaiti,serif;\">个人构建网址，如有bug请老师谅解🥺</span>"
   },
   {
     "id": "e_line0",
@@ -37,18 +37,18 @@ var INIT_ELEMENTS = [
   {
     "id": "e_photo",
     "type": "image",
-    "x": 676,
-    "y": 53,
-    "w": 94,
-    "h": 118,
-    "z": 14,
+    "x": 687,
+    "y": 89,
+    "w": 77,
+    "h": 87,
+    "z": 12,
     "src": "https://ching12333.github.io/resume-luteng/assets/img_2.png"
   },
   {
     "id": "e_qr",
     "type": "image",
-    "x": 587,
-    "y": 102,
+    "x": 588,
+    "y": 96,
     "w": 76,
     "h": 76,
     "z": 15,
@@ -57,18 +57,18 @@ var INIT_ELEMENTS = [
   {
     "id": "e_edu_t",
     "type": "text",
-    "x": 46,
-    "y": 82,
+    "x": 52,
+    "y": 65,
     "w": 300,
     "h": 24,
     "z": 77,
-    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">教育背景</span>"
+    "html": "<span style=\"font-size:15px;font-weight:900;color:#2c3e50;font-family:SimHei,黑体,Microsoft YaHei,sans-serif;letter-spacing:1px;\">个人介绍</span>"
   },
   {
     "id": "e_school",
     "type": "text",
     "x": 28,
-    "y": 108,
+    "y": 96,
     "w": 640,
     "h": 20,
     "z": 17,
@@ -78,7 +78,7 @@ var INIT_ELEMENTS = [
     "id": "e_gpa",
     "type": "text",
     "x": 28,
-    "y": 130,
+    "y": 121,
     "w": 640,
     "h": 20,
     "z": 18,
@@ -87,8 +87,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_contact",
     "type": "text",
-    "x": 27,
-    "y": 152,
+    "x": 28,
+    "y": 145,
     "w": 640,
     "h": 20,
     "z": 19,
@@ -168,11 +168,11 @@ var INIT_ELEMENTS = [
     "id": "e_r1paper",
     "type": "text",
     "x": 29,
-    "y": 244,
+    "y": 243,
     "w": 730,
     "h": 34,
     "z": 28,
-    "html": "<span style=\"font-size:12.5px;\"><strong>论文成果：</strong>Zechen Yan, Yue Zhang, Lei Zhu, et al. EMD-NEMD supercritical CO₂ by pressure driving in deep shale oil nanoslits. <em>Chemical Engineering Science</em>, 2025, Under Revision（中科院二区，独立一作）</span>"
+    "html": "<span style=\"font-size:12.5px;\"><strong>论文成果：</strong>Zechen Yan, Yue Zhang, Lei Zhu, et al. EMD-NEMD supercritical CO₂ by pressure driving in deep shale oil nanoslits. <em>Chemical Engineering Science</em>, 2025, Under Revision（中科院二区TOP，独立一作）</span>"
   },
   {
     "id": "e_r2t",
@@ -358,7 +358,7 @@ var INIT_ELEMENTS = [
     "id": "e_line3",
     "type": "line",
     "x": 28,
-    "y": 864,
+    "y": 856,
     "w": 730,
     "h": 2,
     "z": 86,
@@ -417,8 +417,8 @@ var INIT_ELEMENTS = [
   {
     "id": "e_line4",
     "type": "line",
-    "x": 27,
-    "y": 999,
+    "x": 24,
+    "y": 992,
     "w": 730,
     "h": 2,
     "z": 89,
@@ -447,8 +447,8 @@ var INIT_ELEMENTS = [
   {
     "id": "el_17743296648082np1vlid419",
     "type": "text",
-    "x": 655,
-    "y": 215,
+    "x": 654,
+    "y": 219,
     "w": 300,
     "h": 30,
     "z": 59,
@@ -457,8 +457,8 @@ var INIT_ELEMENTS = [
   {
     "id": "el_1774329739140wdbsuan189a",
     "type": "text",
-    "x": 654,
-    "y": 437,
+    "x": 652,
+    "y": 443,
     "w": 300,
     "h": 30,
     "z": 60,
@@ -467,7 +467,7 @@ var INIT_ELEMENTS = [
   {
     "id": "el_1774329747554y6uncfr07tl",
     "type": "text",
-    "x": 650,
+    "x": 651,
     "y": 612,
     "w": 300,
     "h": 30,
@@ -487,8 +487,8 @@ var INIT_ELEMENTS = [
   {
     "id": "el_1774330617405zz491dypcss",
     "type": "image",
-    "x": 25,
-    "y": 47,
+    "x": 26,
+    "y": 53,
     "w": 770,
     "h": 44,
     "z": 62,
