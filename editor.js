@@ -60,6 +60,7 @@ function restoreSnapshot(html){
   slide.innerHTML = html;
   slide.querySelectorAll('.el').forEach(function(el){ rebindEl(el); });
   updateUndoRedoBtns();
+  updateSlideHeight();
 }
 
 function undo(){
@@ -134,6 +135,43 @@ function rebindEl(el){
 // ============================================================
 //  初始化
 // ============================================================
+// ============================================================
+//  动态更新画布高度（支持多页内容）
+// ============================================================
+function updateSlideHeight(){
+  var minH = 1123; // 至少一页A4高度
+  var maxBottom = minH;
+  slide.querySelectorAll('.el').forEach(function(el){
+    var top = parseInt(el.style.top) || 0;
+    var h   = parseInt(el.style.height) || 0;
+    var bottom = top + h;
+    if(bottom > maxBottom) maxBottom = bottom;
+  });
+  // 底部留80px边距，并向上取整到整页高度（1123px）
+  var pages = Math.ceil((maxBottom + 80) / 1123);
+  var newH = Math.max(minH, pages * 1123);
+  slide.style.minHeight = newH + 'px';
+  // 同步更新分页背景装饰线
+  updatePageDividers(pages);
+}
+
+// 在页面分隔处画淡灰色虚线，帮助识别页面边界
+function updatePageDividers(pages){
+  var existing = document.getElementById('page-dividers');
+  if(existing) existing.remove();
+  if(pages <= 1) return;
+  var div = document.createElement('div');
+  div.id = 'page-dividers';
+  div.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:1;';
+  var html = '';
+  for(var i = 1; i < pages; i++){
+    var y = i * 1123;
+    html += '<div style="position:absolute;left:0;right:0;top:'+y+'px;height:2px;background:rgba(150,150,150,0.25);border-top:1px dashed rgba(150,150,150,0.4);"></div>';
+  }
+  div.innerHTML = html;
+  slide.appendChild(div);
+}
+
 function init(){
   if(typeof INIT_ELEMENTS !== 'undefined'){
     INIT_ELEMENTS.forEach(createEl);
@@ -146,7 +184,8 @@ function init(){
   document.addEventListener('keydown',   onKeyDown);
   // 粘贴事件（全局监听，支持从外部粘贴图片/文本）
   document.addEventListener('paste', onPaste);
-  setTimeout(snapshotSlide, 100);
+  // 初始化后更新画布高度
+  setTimeout(function(){ updateSlideHeight(); snapshotSlide(); }, 100);
   updateUndoRedoBtns();
 }
 
@@ -550,6 +589,7 @@ function onMouseMove(e){
 function onMouseUp(){
   if(dragState && (dragState.type==='move'||dragState.type==='moveGroup'||dragState.type==='resize')){
     snapshotSlide();
+    updateSlideHeight();
   }
   dragState=null;
 }
