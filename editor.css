@@ -5,7 +5,7 @@
  * ============================================================ */
 
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sans-serif;user-select:none;}
+body{background:#b0b8c1;font-family:"Microsoft YaHei","微软雅黑","Times New Roman",Arial,sans-serif;user-select:none;}
 
 /* ===== 工具栏 ===== */
 #toolbar{
@@ -106,14 +106,17 @@ body{background:#b0b8c1;font-family:"SimSun","宋体","Microsoft YaHei",Arial,sa
   width:100%;height:100%;
   overflow:visible;line-height:1.55;
   word-break:break-word;white-space:pre-wrap;
+  font-family:"Microsoft YaHei","微软雅黑","Times New Roman",Arial,sans-serif;
+  letter-spacing:1.5px;
 }
 .el-text[contenteditable="true"]{
   outline:none;cursor:text;overflow:visible;user-select:text;
 }
 
 /* ===== 图片 ===== */
-.el-img-wrap{width:100%;height:100%;position:relative;overflow:hidden;}
-.el-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
+/* 白色背景防止透明 PNG 在某些浏览器中显示为黑色 */
+.el-img-wrap{width:100%;height:100%;position:relative;overflow:hidden;background:#fff;}
+.el-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;background:transparent;}
 .img-hint{
   position:absolute;inset:0;background:rgba(0,0,0,0);
   display:flex;align-items:center;justify-content:center;

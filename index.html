@@ -45,12 +45,13 @@
 
   <span class="tlabel">字体</span>
   <select id="tb-font" onchange="applyFontFamily(this.value)">
+    <option value="Microsoft YaHei,微软雅黑,sans-serif" selected>微软雅黑（默认）</option>
+    <option value="Times New Roman,Georgia,serif">Times New Roman（英文）</option>
+    <option value="Times New Roman,Microsoft YaHei,微软雅黑,sans-serif">新罗马+雅黑（混合）</option>
     <option value="SimSun,宋体,serif">宋体</option>
     <option value="SimHei,黑体,Microsoft YaHei,sans-serif">黑体</option>
     <option value="KaiTi,楷体,STKaiti,serif">楷体</option>
-    <option value="Microsoft YaHei,微软雅黑,sans-serif">微软雅黑</option>
     <option value="Arial,sans-serif">Arial</option>
-    <option value="Times New Roman,serif">Times New Roman</option>
   </select>
   <div class="sep"></div>
 
@@ -78,7 +79,7 @@
   <div class="sep"></div>
 
   <button class="tbtn red"    onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
-  <button class="tbtn orange" onclick="saveToGitHub()"   title="保存并推送到 GitHub，约1分钟后网址更新">☁ 保存到网址</button>
+  <button class="tbtn orange" id="btn-save-github" onclick="saveToGitHub()"   title="保存并推送到 GitHub，约1分钟后网址更新">☁ 保存到网址</button>
   <button class="tbtn green"  onclick="saveHTML()">💾 下载</button>
   <button class="tbtn"        onclick="window.print()">🖨️ 打印/PDF</button>
 </div>

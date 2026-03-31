@@ -417,6 +417,7 @@ function setFontSize(fs){
       span.style.fontSize = fs + 'px';
       span.appendChild(fragment);
       range.insertNode(span);
+      // 修复：插入后恢复选区，确保连续操作均有效
       var newRange = document.createRange();
       newRange.selectNodeContents(span);
       sel.removeAllRanges();
@@ -446,6 +447,11 @@ function applyColor(val){
       span.style.color = val;
       span.appendChild(fragment);
       range.insertNode(span);
+      // 修复：插入后恢复选区
+      var newRange = document.createRange();
+      newRange.selectNodeContents(span);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
     } else {
       inner.style.color = val;
     }
@@ -522,6 +528,11 @@ function applyFontFamily(val){
       span.style.fontFamily = val;
       span.appendChild(fragment);
       range.insertNode(span);
+      // 修复：插入后恢复选区，确保第二次操作仍有效
+      var newRange = document.createRange();
+      newRange.selectNodeContents(span);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
     } else {
       inner.style.fontFamily = val;
     }
@@ -944,6 +955,7 @@ function buildDataFileContent(){
 //  4. 保存中禁用按钮，防止重复点击
 // ============================================================
 var _isSaving = false;
+var _saveTimeout = null;
 
 function saveToGitHub(){
   if(_isSaving){
@@ -952,9 +964,16 @@ function saveToGitHub(){
   }
   _isSaving = true;
 
-  var toast = document.getElementById('save-toast');
-  var saveBtn = document.querySelector('.tbtn.orange');
+  // 修复：用 id 精确查找保存按钮，避免 class 选择器在DOM变化时失效
+  var saveBtn = document.getElementById('btn-save-github');
   if(saveBtn){ saveBtn.disabled = true; saveBtn.style.opacity = '0.6'; }
+
+  // 安全兜底：60秒后强制解锁，防止网络异常导致永久锁定
+  if(_saveTimeout) clearTimeout(_saveTimeout);
+  _saveTimeout = setTimeout(function(){
+    _finishSave(saveBtn);
+    showToast('⚠️ 保存超时，请重试', '#e67e22', 4000);
+  }, 60000);
 
   showToast('⏳ 正在保存到 GitHub...', '#2980b9', 0);
 
@@ -1027,6 +1046,8 @@ function saveToGitHub(){
 function _finishSave(saveBtn){
   _isSaving = false;
   if(saveBtn){ saveBtn.disabled = false; saveBtn.style.opacity = ''; }
+  // 清除超时屏底定时器
+  if(_saveTimeout){ clearTimeout(_saveTimeout); _saveTimeout = null; }
 }
 
 // ============================================================
