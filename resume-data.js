@@ -158,11 +158,11 @@ var INIT_ELEMENTS = [
     "id": "e_r1paper",
     "type": "text",
     "x": 35,
-    "y": 300,
+    "y": 299,
     "w": 730,
     "h": 34,
     "z": 28,
-    "html": "<span style=\"font-size:12.5px;\"><strong>论文成果：</strong>Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span>"
+    "html": "<span style=\"font-size:12.5px;\"><b style=\"font-weight: bold; color: red;\">论文成果：</b>Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span>"
   },
   {
     "id": "e_r2t",
@@ -972,7 +972,7 @@ var INIT_ELEMENTS = [
     "w": 770,
     "h": 40,
     "z": 245,
-    "html": "<span style=\"font-size:13px;letter-spacing:1.5px;\"><span style=\"color:#c0392b;font-weight:700;\">◇ 论文成果：</span><span style=\"color: rgb(192, 57, 43);\">Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span></span>"
+    "html": "<span style=\"font-size:13px;letter-spacing:1.5px;\"><span style=\"color: rgb(192, 57, 43);\"><b>◇ </b><b style=\"font-weight: 700; color: red;\">论文成果：</b><span style=\"color: rgb(0, 0, 0);\">Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span></span></span>"
   },
   {
     "id": "ppt_t_1774967420832_1524",
