@@ -302,7 +302,7 @@ var INIT_ELEMENTS = [
     "w": 730,
     "h": 18,
     "z": 42,
-    "html": "<span style=\"font-size:12.5px;\">◇ 以队长身份斩获山东省物理实验竞赛<strong>省一</strong>、全国大学生物理实验竞赛<strong>国二</strong>，相关论文成果在由队友撰写</span>"
+    "html": "<span style=\"font-size:12.5px;\"><strong>项目成果：</strong>山东省物理实验竞赛省一，大学生物理实验竞赛国二，相关论文成果队友整理中</span>"
   },
   {
     "id": "e_p2t",
