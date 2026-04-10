@@ -5,7 +5,7 @@
  * ============================================================ */
 
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#b0b8c1;font-family:"Microsoft YaHei","微软雅黑","Times New Roman",Arial,sans-serif;user-select:none;}
+body{background:#f4f7f9;font-family:"Microsoft YaHei","微软雅黑","Times New Roman",Arial,sans-serif;user-select:auto;}
 
 /* ===== 工具栏 ===== */
 #toolbar{
@@ -73,24 +73,15 @@ body{background:#b0b8c1;font-family:"Microsoft YaHei","微软雅黑","Times New 
 }
 
 /* ===== 元素 ===== */
-.el{position:absolute;cursor:move;min-width:20px;min-height:12px;}
+.el{position:absolute;cursor:default;min-width:20px;min-height:12px;}
 .el:hover .el-border{opacity:1;}
 .el.selected .el-border{opacity:1;border-color:#2980b9;}
 .el.multi-sel .el-border{opacity:1;border-color:#e67e22;}
-.el-border{
-  position:absolute;inset:-2px;
-  border:2px dashed rgba(100,160,220,.65);
-  border-radius:2px;pointer-events:none;opacity:0;
-  transition:opacity .1s;z-index:10;
-}
+.el-border{ display:none; }
 .el.multi-sel .el-border{border-color:rgba(230,126,34,.8);}
 
 /* 控制点 */
-.handle{
-  position:absolute;width:9px;height:9px;
-  background:#fff;border:2px solid #2980b9;
-  border-radius:50%;z-index:20;display:none;
-}
+.handle{ display:none; }
 .el.selected .handle{display:block;}
 .handle.nw{top:-6px;left:-6px;cursor:nw-resize;}
 .handle.n {top:-6px;left:calc(50% - 4px);cursor:n-resize;}
@@ -117,12 +108,7 @@ body{background:#b0b8c1;font-family:"Microsoft YaHei","微软雅黑","Times New 
 /* 白色背景防止透明 PNG 在某些浏览器中显示为黑色 */
 .el-img-wrap{width:100%;height:100%;position:relative;overflow:hidden;background:#fff;}
 .el-img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;background:transparent;}
-.img-hint{
-  position:absolute;inset:0;background:rgba(0,0,0,0);
-  display:flex;align-items:center;justify-content:center;
-  color:transparent;font-size:11px;font-family:Arial;
-  transition:background .15s,color .15s;pointer-events:none;border-radius:2px;
-}
+.img-hint{ display:none; }
 .el:hover .img-hint{background:rgba(0,0,0,.4);color:#fff;}
 
 /* ===== 线条 ===== */

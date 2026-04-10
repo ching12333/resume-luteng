@@ -3,98 +3,24 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>卢腾 - 简历编辑器</title>
-<!-- 编辑器样式（独立文件，可单独更新） -->
+<title>卢腾 - 个人简历</title>
+<!-- 简历样式 -->
 <link rel="stylesheet" href="editor.css"/>
+<style>
+  /* 移除编辑器相关的边距和背景色 */
+  #canvas-wrap { margin: 20px auto !important; }
+  body { background: #f4f7f9; }
+</style>
 </head>
 <body>
-
-<!-- 工具栏 -->
-<div id="toolbar">
-  <span style="color:#7fb3d3;font-size:13px;font-weight:bold;flex-shrink:0;">✏️ 简历</span>
-  <div class="sep"></div>
-
-  <button class="tbtn" onclick="addText()">＋文字</button>
-  <button class="tbtn" onclick="addImageEl()">＋图片</button>
-  <button class="tbtn" onclick="addLine()">＋横线</button>
-  <button class="tbtn" onclick="addRect()" title="新增紫色边框装饰框">＋紫框</button>
-  <button class="tbtn" onclick="addStar()" title="新增星星装饰">＋★</button>
-  <div class="sep"></div>
-
-  <!-- 字号区域 -->
-  <span class="tlabel">字号</span>
-  <input id="tb-fontsize" type="number" value="13" min="6" max="200"
-    title="输入字号后按 Enter 应用（可先选中部分文字再改）"
-    onkeydown="if(event.key==='Enter'){applyFontSize();event.preventDefault();}"/>
-  <button class="tbtn" style="padding:4px 6px;" onclick="applyFontSize()" title="应用字号">✓</button>
-  <!-- 快捷字号 -->
-  <button class="fs-quick" onclick="setFontSize(10)">10</button>
-  <button class="fs-quick" onclick="setFontSize(12)">12</button>
-  <button class="fs-quick" onclick="setFontSize(14)">14</button>
-  <button class="fs-quick" onclick="setFontSize(16)">16</button>
-  <button class="fs-quick" onclick="setFontSize(20)">20</button>
-  <button class="fs-quick" onclick="setFontSize(28)">28</button>
-
-  <div class="sep"></div>
-  <span class="tlabel">颜色</span>
-  <input id="tb-color" type="color" value="#111111" onchange="applyColor(this.value)"/>
-
-  <button class="tbtn" id="btn-bold"   onclick="toggleBold()"      title="加粗 Ctrl+B"><b>B</b></button>
-  <button class="tbtn" id="btn-italic" onclick="toggleItalic()"    title="斜体 Ctrl+I"><i>I</i></button>
-  <button class="tbtn" id="btn-under"  onclick="toggleUnderline()" title="下划线"><u>U</u></button>
-
-  <span class="tlabel">字体</span>
-  <select id="tb-font" onchange="applyFontFamily(this.value)">
-    <option value="Microsoft YaHei,微软雅黑,sans-serif" selected>微软雅黑（默认）</option>
-    <option value="Times New Roman,Georgia,serif">Times New Roman（英文）</option>
-    <option value="Times New Roman,Microsoft YaHei,微软雅黑,sans-serif">新罗马+雅黑（混合）</option>
-    <option value="SimSun,宋体,serif">宋体</option>
-    <option value="SimHei,黑体,Microsoft YaHei,sans-serif">黑体</option>
-    <option value="KaiTi,楷体,STKaiti,serif">楷体</option>
-    <option value="Arial,sans-serif">Arial</option>
-  </select>
-  <div class="sep"></div>
-
-  <button class="tbtn" onclick="bringForward()" title="上移一层">↑层</button>
-  <button class="tbtn" onclick="sendBackward()" title="下移一层">↓层</button>
-  <button class="tbtn" onclick="alignLeft()"   title="左对齐">⬛←</button>
-  <button class="tbtn" onclick="alignCenter()" title="居中">⬛↔</button>
-  <button class="tbtn" onclick="alignRight()"  title="右对齐">→⬛</button>
-  <div class="sep"></div>
-
-  <!-- 复制 / 粘贴 -->
-  <button class="tbtn" onclick="copySelected()"      title="复制选中元素 Ctrl+C">⎘ 复制</button>
-  <button class="tbtn" onclick="pasteFromClipboard()" title="粘贴 Ctrl+V">⎗ 粘贴</button>
-  <div class="sep"></div>
-
-  <button class="tbtn" onclick="replaceSelectedImg()" title="替换选中图片">🖼 换图</button>
-  <div class="sep"></div>
-
-  <button class="tbtn" id="btn-undo" onclick="undo()" title="撤销 Ctrl+Z">↩ 撤销</button>
-  <button class="tbtn" id="btn-redo" onclick="redo()" title="重做 Ctrl+Y">↪ 重做</button>
-  <div class="sep"></div>
-
-  <!-- 参考线开关 -->
-  <button class="tbtn" id="btn-guidelines" onclick="toggleGuidelines()" title="显示参考线">⊞ 参考线</button>
-  <div class="sep"></div>
-
-  <button class="tbtn red"    onclick="deleteSelected()" title="删除 Delete">🗑 删除</button>
-  <button class="tbtn orange" id="btn-save-github" onclick="saveToGitHub()"   title="保存并推送到 GitHub，约1分钟后网址更新">☁ 保存到网址</button>
-  <button class="tbtn green"  onclick="saveHTML()">💾 下载</button>
-  <button class="tbtn"        onclick="window.print()">🖨️ 打印/PDF</button>
-</div>
-
-<div id="multi-badge"></div>
-<div id="save-toast"></div>
-<input type="file" id="img-file-input" accept="image/*" style="display:none"/>
 
 <div id="canvas-wrap">
   <div id="slide"></div>
 </div>
 
-<!-- 简历数据（独立文件，保存时只更新此文件） -->
+<!-- 简历数据 -->
 <script src="resume-data.js"></script>
-<!-- 编辑器逻辑（独立文件，可单独更新编辑器版本） -->
+<!-- 简历渲染逻辑 -->
 <script src="editor.js"></script>
 
 </body>

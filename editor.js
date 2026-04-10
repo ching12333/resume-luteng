@@ -126,9 +126,9 @@ function rebindEl(el){
     }
   });
   if(el.dataset.eltype === 'text'){
-    el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
+    // el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
   } else if(el.dataset.eltype === 'image'){
-    el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
+    // el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
   }
 }
 
@@ -179,11 +179,10 @@ function init(){
   slide.addEventListener('mousedown', function(e){
     if(e.target === slide) deselectAll();
   });
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup',   onMouseUp);
-  document.addEventListener('keydown',   onKeyDown);
-  // 粘贴事件（全局监听，支持从外部粘贴图片/文本）
-  document.addEventListener('paste', onPaste);
+  // document.addEventListener('mousemove', onMouseMove);
+  // document.addEventListener('mouseup',   onMouseUp);
+  // document.addEventListener('keydown',   onKeyDown);
+  // document.addEventListener('paste', onPaste);
   // 初始化后更新画布高度
   setTimeout(function(){ updateSlideHeight(); snapshotSlide(); }, 100);
   updateUndoRedoBtns();
@@ -217,7 +216,7 @@ function createEl(d){
     inner.className = 'el-text';
     inner.innerHTML = d.html || '';
     el.appendChild(inner);
-    el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
+    // el.addEventListener('dblclick', function(e){ e.stopPropagation(); startTextEdit(el); });
 
   } else if(d.type === 'image'){
     el.dataset.eltype = 'image';
@@ -229,7 +228,7 @@ function createEl(d){
     hint.className = 'img-hint'; hint.textContent = '双击替换图片';
     wrap.appendChild(img); wrap.appendChild(hint);
     el.appendChild(wrap);
-    el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
+    // el.addEventListener('dblclick', function(e){ e.stopPropagation(); replaceImgEl(el); });
 
   } else if(d.type === 'rect'){
     el.dataset.eltype = 'rect';
@@ -262,27 +261,12 @@ function createEl(d){
     svg.appendChild(ln); lw.appendChild(svg); el.appendChild(lw);
   }
 
+  // 禁用编辑事件
+  /*
   el.addEventListener('mousedown', function(e){
-    if(e.target.classList.contains('handle')){
-      e.stopPropagation(); e.preventDefault();
-      deselectAll(); selectEl(el);
-      startResize(e, e.target.dataset.dir, el);
-      return;
-    }
-    if(editingText && el === selected) return;
-    e.stopPropagation();
-    if(e.ctrlKey || e.metaKey){
-      e.preventDefault();
-      toggleMultiSel(el);
-    } else {
-      if(selected && selected !== el) stopTextEdit(selected);
-      if(multiSel.length > 1 && multiSel.indexOf(el) !== -1){
-        startMoveGroup(e);
-      } else {
-        deselectAll(); selectEl(el); startMove(e, el);
-      }
-    }
+    ...
   });
+  */
 
   slide.appendChild(el);
   return el;
