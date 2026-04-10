@@ -162,7 +162,7 @@ var INIT_ELEMENTS = [
     "w": 730,
     "h": 34,
     "z": 28,
-    "html": "<span style=\"font-size:12.5px;\"><strong>论文成果：</strong>Teng Lu, Zhiyang xie ,Yansong Gu, et al. Layer-Resolved NMR Relaxation of Model Shale Oil Occurrence States in Quartz Nanopores</span><span style=\"font-size:12.5px;\">. <em>Colloids and surfaces A: Physicpchemical and Engineering Aspects </em>, 2026, Under Revision（中科院二区TOP，独立一作）</span>"
+    "html": "<span style=\"font-size:12.5px;\"><strong>论文成果：</strong>Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span>"
   },
   {
     "id": "e_r2t",
@@ -457,8 +457,8 @@ var INIT_ELEMENTS = [
   {
     "id": "el_1774329747554y6uncfr07tl",
     "type": "text",
-    "x": 664,
-    "y": 605,
+    "x": 651,
+    "y": 612,
     "w": 300,
     "h": 30,
     "z": 61,
@@ -972,7 +972,7 @@ var INIT_ELEMENTS = [
     "w": 770,
     "h": 40,
     "z": 245,
-    "html": "<span style=\"font-size:13px;letter-spacing:1.5px;\"><span style=\"color:#c0392b;font-weight:700;\">◇ 论文成果：</span>Zechen Yan, <strong>Yue Zhang</strong>, Lei Zhu, et al. EMD-NEMD supercritical CO₂ by pressure driving in deep shale oil nanoslits. <em>Chemical Engineering Science</em>, 2025, <strong>Under Revision</strong>（中科院二区TOP，独立一作）</span>"
+    "html": "<span style=\"font-size:13px;letter-spacing:1.5px;\"><span style=\"color:#c0392b;font-weight:700;\">◇ 论文成果：</span><span style=\"color: rgb(192, 57, 43);\">Teng Lu, Zhiyang Xie, Yansong Gu et al. Layer-Resolved NMR Relaxation Characterization of Model Shale-Oil Occurrence States in Quartz Nanopores. Colloids and Surfaces A: Physicochemical and Engineering Aspects, 2026, Under Revision（中科院二区TOP，独立一作）</span></span>"
   },
   {
     "id": "ppt_t_1774967420832_1524",
